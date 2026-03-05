@@ -90,7 +90,7 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
             color: colors.keyText,
             borderRadius: '4px',
             cursor: 'pointer',
-            fontSize: '11px',
+            fontSize: '12px',
             margin: '8px 0 0 0',
             display: 'flex',
             alignItems: 'center',

@@ -132,7 +132,7 @@ export const Board = ({ setPressed, realTimeKeys, setRealTimeKeys, persistentKey
          const normalizedKey = normalizeKey(event.key)
 
          playSound(normalizedKey)
-         setPressed(normalizedKey)
+         setPressed(normalizedKey.toLowerCase())
 
          if (normalizedKey.startsWith('F') || normalizedKey === 'Alt') {
          event.preventDefault()
