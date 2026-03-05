@@ -1,0 +1,19 @@
+#typing {
+   display: flex;
+   align-items: center;
+   justify-content: space-evenly;
+   width: 100%;
+   padding: 8px;
+   color: var(--key-text);
+   background-color: var(--board-bg);
+   border: 1px solid var(--key-text);
+   border-radius: 5px;
+   gap: 8px;
+   box-sizing: border-box;
+   margin-bottom: 4px;
+
+   div {
+      font-size: 12px;
+      font-weight: 600;
+   }
+}

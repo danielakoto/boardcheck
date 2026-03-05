@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "BoardCheck - The simple keyboard checker.",
+  "version": "1.0",
+  "description": "The most satisfying keyboard checker chrome extension.",
+  "icons": {
+    "16": "img/logo-128.png",
+    "48": "img/logo-128.png",
+    "128": "img/logo-128.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "img/logo-128.png",
+      "48": "img/logo-128.png",
+      "128": "img/logo-128.png"
+    }
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["sounds/keyboard/*.mp3", "img/*.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

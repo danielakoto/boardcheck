@@ -1,0 +1,221 @@
+#keyboard-tester {
+  display: flex;
+  flex-direction: column;
+}
+
+#keyboard-header-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  #keyboard-logo {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    img {
+      height: 20px;
+      width: 20px;
+    }
+    
+    h3 {
+      font-size: var(--header);
+      font-weight: 600;
+      margin: 0 !important;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .options-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 8px;
+    gap: 8px;
+  }
+
+}
+
+#typing-section, #keyboard-section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--board-bg);;
+  border-radius: 5px;
+  box-shadow: var(--box-shadow);
+}
+ 
+ .keyboard-row {
+   display: flex;
+   margin-bottom: 4px;
+ }
+ 
+.key {
+  // min-width: fit-content;
+  width: 30px;
+  height: 30px;
+  padding: 4px;
+  margin: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--key-bg);
+  border-radius: 5px;
+  border: 1px solid var(--black);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: default;
+  box-shadow: 0 4px var(--key-shadow);
+  color: var(--key-text);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.key.active {
+  // margin: 2px;
+  background-color: var(--active-highlight);
+  box-shadow: 0 4px var(--active-highlight);
+  // border: 1px solid transparent;
+}
+
+.key.persistent {
+  background-color: var(--clicked-key-bg);  /* Clicked highlight color (green) */
+  color: var(--clicked-key-text);
+}
+
+
+.key-Esc {
+  width:30px;
+}
+.key-Space {
+  width: 204px;
+}
+
+.key-Enter {
+  width: 110px;
+}
+
+.key-Tab {
+  width: 70px;
+}
+
+.key-CapsLock {
+  width: 75px;
+}
+
+.key-Backspace {
+  width: 98px;
+}
+
+.key-Shift {
+  width: 92px;
+}
+
+.key-Ctrl, .key-Win, .key-Alt, .key-Fn {
+  width:45px;
+} 
+
+.key-← {
+  margin: 1px 1px 1px 28px;
+}
+.key-←.active {
+  margin: 2px 1px 0 28px !important;
+}
+
+.key-F1, .key-F5, .key-F9, .key-Insert {
+  margin-left: 8px;
+}
+
+.key-Slash {
+  width: 73px;
+}
+.key-Quote {
+  width: 45px;
+}
+.key-Insert {
+  width: 35px;
+}
+.key-Home {
+  width: 35px;
+}
+.key-Circle {
+  border-radius: 50%;
+  margin-left: 8px;
+}
+.TbReload {
+  font-size: 25px;
+  cursor: pointer;
+  transition: var(--transition-all);
+}
+.TbReload:hover {
+  color: var(--key-bg) !important;
+}
+
+
+#sound-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s;
+  overflow: scroll;
+  height: 100%;
+  background-color: var(--bg);
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
+
+  .sound-choice {
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid rgba(99, 99, 99, 0.2);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+
+    .urls {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      z-index: 1001;
+      border-radius: 4px;
+
+      div {
+        border: 1px solid rgba(99, 99, 99, 0.2);
+        font-size: 10px;
+        padding: 5px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        color: var(--key-text);
+      }
+      div:hover {
+        border: 1px solid rgba(99, 99, 99, 0.5);
+      }
+    }
+
+    h4, p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .sound-choice:hover {
+    border: 1px solid rgba(99, 99, 99, 0.5);
+  }
+}
+
+#sound-selector::-webkit-scrollbar {
+  display: none;
+}
