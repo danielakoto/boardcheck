@@ -22,7 +22,7 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
          style={{
             background: open ? colors.keyBg : 'var(--bg)',
             color: 'var(--text)',
-            borderRadius: '6px',
+            borderRadius: '5px',
             padding: '4px',
             cursor: 'pointer',
             fontSize: '18px',
@@ -42,7 +42,8 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
         right: open ? '12px' : '-255px',
         width: '220px',
         height: 'fit-content',
-        background: 'var(--bg)',
+        background: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(5px)',
         color: 'var(--text)',
         padding: '16px',
         zIndex: 999,
@@ -57,7 +58,7 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
           <h3 style={{ margin: 0, fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>
             Colors
           </h3>
-          <FaTimes onClick={() => setOpen(o => !o)}  style={{ margin: 0, fontSize: '14px', cursor: 'pointer' }} />
+          <FaTimes onClick={() => setOpen(o => !o)} className='icon-button' />
         </div>
 
         {Object.entries(LABELS).map(([key, label]) => (
@@ -73,7 +74,7 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
                   width: '36px',
                   height: '28px',
                   border: 'none',
-                  borderRadius: '4px',
+                  borderRadius: '5px',
                   cursor: 'pointer',
                   background: 'transparent',
                   padding: '0',
@@ -85,10 +86,10 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
         <div
           onClick={resetColors}
           style={{
-            padding: '8px',
+            padding: '7px',
             background: colors.keyBg,
             color: colors.keyText,
-            borderRadius: '4px',
+            borderRadius: '5px',
             cursor: 'pointer',
             fontSize: '12px',
             margin: '8px 0 0 0',

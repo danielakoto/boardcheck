@@ -1,45 +1,66 @@
+
+#keyboard-section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 #typing {
-   display: flex;
-   flex-direction: column;
-   width: 100%;
-   margin-bottom: 4px;
-   gap: 4px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 4px;
+  gap: 4px;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  box-shadow: var(--box-shadow);
 
-   .words {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      color: var(--key-text);
-      background-color: var(--board-bg);
-      border: 1px solid var(--key-text);
-      border-radius: 5px;
-      gap: 8px;
-      box-sizing: border-box;
-      
-      div {
-         font-size: 12px;
-         font-weight: 600;
-         border-radius: 5px;
-         padding: 4px;
-      }
-   }
+  // In Typing.scss — add these alongside your existing word styles
 
-   .words-set {
-      padding: 4px;
-   }
-   .words-typed {
-      padding: 0px;
-   }
+  .words {
+    max-height: 120px;      // ~3 rows
+    overflow: scroll;        // hide scrollbar, scroll is JS-driven
+    scroll-behavior: smooth;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8px;
+    width: 100%;
+    border-radius: 5px;
+    gap: 8px;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
+  }
 
+  #words::-webkit-scrollbar {
+    display: none;
+  }
+
+  .word {
+    letter-spacing: 1px;
+    color: var(--text);
+    opacity: 0.75;
+    transition: opacity 0.15s ease;
+    font-size: 14px;
+
+    &.word-active {
+      opacity: 1;
+    }
+
+    &.word-done-correct { opacity: 0.85; color: #4ade80; }
+    &.word-done-wrong   { opacity: 0.85; color: #f87171; }
+  }
+
+  // Per-character states
+  .char {
+    transition: color 0.08s ease;
+
+    &-pending { color: var(--text) }
+    &-correct { color: #4ade80; }         // green
+    &-wrong   { color: #f87171; }         // red
+  }
 }
-
-.correct-word {
-   background-color: greenyellow;
-}
-.wrong-word {
-   background-color: red;
-}
-
 
 /* Stats Bar */
 .stats-bar {
@@ -49,19 +70,19 @@
 }
 
 .stat-card {
-   display: flex;
-   justify-content: space-between;
-   background: var(--board-bg);
-   backdrop-filter: blur(10px);
-   border: 1px solid var(--key-text);
-   border-radius: 5px;
-   padding: 8px;
-   text-align: center;
-   transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  border: none;
+  background: transparent;
+  backdrop-filter: blur(1px);
+  border-radius: 5px;
+  padding: 8px;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
 .stat-label {
-  color: var(--key-text);
+  color: var(--text);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -72,7 +93,7 @@
   font-family: 'Courier New', monospace;
   font-size: 12px;
   font-weight: 700;
-  color: var(--key-text);
+  color: var(--text);
 }
 
 /* Progress Bar */
@@ -90,51 +111,7 @@
   border-radius: 9999px;
 }
 
-
-
-/* Idle State */
-.test-idle-state {
-  text-align: center;
-}
-
-.idle-card {
-   display: flex;
-   background: var(--board-bg);
-   backdrop-filter: blur(10px);
-   border: 1px solid var(--board-bg);
-   border-radius: 5px;
-   padding: 8px;
-}
-
-.duration-selector {
-   display: flex;
-}
-
-.duration-select {
-  background: var(--board-bg);
-  border: 1px solid var(--key-bg);
-  border-radius: 5px;
-  color: white;
-  padding: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.duration-select:hover {
-  border-color: var(--key-text);
-  background: var(--board-bg);
-}
-
-.duration-select:focus {
-  outline: none;
-  border-color: var(--key-text);
-  box-shadow: var(--box-shadow);
-}
-
-/* Running State */
-.test-running-state {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
 }

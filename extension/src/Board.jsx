@@ -67,7 +67,7 @@ const KEY_PITCH_OVERRIDES = {
    'Shift':     semitones(-4),
 }
 
-export const Board = ({ setPressed, realTimeKeys, setRealTimeKeys, persistentKeys, setPersistentKeys, sound, colors }) => {
+export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersistentKeys, sound, colors }) => {
    const audioContextRef = useRef(null)
    const audioBufferRef = useRef(null)
 
@@ -132,7 +132,6 @@ export const Board = ({ setPressed, realTimeKeys, setRealTimeKeys, persistentKey
          const normalizedKey = normalizeKey(event.key)
 
          playSound(normalizedKey)
-         setPressed(normalizedKey.toLowerCase())
 
          if (normalizedKey.startsWith('F') || normalizedKey === 'Alt') {
          event.preventDefault()
@@ -156,24 +155,15 @@ export const Board = ({ setPressed, realTimeKeys, setRealTimeKeys, persistentKey
    }, [])
 
    return (
-      <div className="keyboard" 
-         style={{
-            '--board-bg':             colors.boardBg,
-            '--key-bg':               colors.keyBg,
-            '--key-shadow':           colors.keyShadow,
-            '--key-text':             colors.keyText,
-            '--active-highlight':     colors.activeHighlight,
-            '--clicked-key-bg':       colors.clickedKeyBg,
-            '--clicked-key-text':     colors.clickedKeyText,
-         }}>
+      <div className="keyboard">
          {KEYBOARD_LAYOUT.map((row, rowIndex) => (
          <div className="keyboard-row" key={rowIndex}>
             {row.map((key, keyIndex) => (
                <div
-               className={`key-${key.replace('\\', 'Slash').replace('`', 'Quote')} key ${realTimeKeys[key] ? 'active' : persistentKeys[key] ? 'persistent' : ''}`}
-               key={keyIndex}
+                  className={`key-${key.replace('\\', 'Slash').replace('`', 'Quote')} key ${realTimeKeys[key] ? 'active' : persistentKeys[key] ? 'persistent' : ''}`}
+                  key={keyIndex}
                >
-               {key.replace('Circle', '')}
+                {key.replace('Circle', '')}
                </div>
             ))}
          </div>

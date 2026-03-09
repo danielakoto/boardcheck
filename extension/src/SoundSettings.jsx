@@ -14,7 +14,7 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
             style={{
                background: open ? colors.keyBg : 'var(--bg)',
                color: 'var(--text)',
-               borderRadius: '6px',
+               borderRadius: '5px',
                padding: '4px',
                cursor: 'pointer',
                fontSize: '18px',
@@ -34,7 +34,8 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
             left: open ? '12px' : '-274px',
             width: '250px',
             height: '273px',
-            background: 'var(--bg)',
+            background: 'rgba(0, 0, 0, 0.75)',
+            backdropFilter: 'blur(5px)',
             color: 'var(--text)',
             padding: '8px',
             zIndex: 999,
@@ -49,7 +50,7 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
                <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>
                   Sounds
                </h3>
-               <FaTimes onClick={() => setOpen(o => !o)}  style={{ margin: 0, fontSize: '14px', cursor: 'pointer' }} />
+               <FaTimes onClick={() => setOpen(o => !o)} className='icon-button' />
             </div>
             <SoundSelector colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
          </div>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const DEFAULTS = {
   boardBg:          '#d3d3d3',
-  keyBg:            '#ffffff',
+  keyBg:            '#f5f5f5',
   keyShadow:        '#666666',
   keyText:          '#202020',
   activeHighlight:  '#d7d7d7',

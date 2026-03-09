@@ -13,7 +13,7 @@ export function SoundSelector({ colors, sound, updateSound, sounds }) {
          {sounds.map(s => (
             <div key={s.id} onClick={() => {updateSound(s)}} className="sound-choice"
                style={{
-                  backgroundColor: sound.id === s.id ? colors.keyBg : 'var(--bg)',
+                  backgroundColor: sound.id === s.id ? colors.keyBg : 'transparent',
                   color: sound.id === s.id ? colors.keyText : 'var(--text)'
                }}
             >

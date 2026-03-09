@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TbReload } from "react-icons/tb";
+import { FaSyncAlt } from "react-icons/fa";
 
 import { Board } from './Board';
 import { Typing } from './Typing';
@@ -15,7 +15,6 @@ import sounds from "../public/sounds/sounds.json"
 import './KeyboardApp.scss'; // We'll define the CSS later
 
 export const KeyboardApp = () => {
-  const [pressed, setPressed] = useState(null)
   const [realTimeKeys, setRealTimeKeys] = useState({}); 
   const [persistentKeys, setPersistentKeys] = useState({});
   const [typingState, setTypingState] = useState("idle")
@@ -33,39 +32,31 @@ export const KeyboardApp = () => {
   };
   
   return (
-    <div id="keyboard-tester">
+    <div id="keyboard-tester"
+      style={{
+        '--board-bg':             colors.boardBg,
+        '--key-bg':               colors.keyBg,
+        '--key-shadow':           colors.keyShadow,
+        '--key-text':             colors.keyText,
+        '--active-highlight':     colors.activeHighlight,
+        '--clicked-key-bg':       colors.clickedKeyBg,
+        '--clicked-key-text':     colors.clickedKeyText,
+      }}>
         <div id="keyboard-header-container">
           <div id='keyboard-logo'>
-            <img src="img/logo.png" alt="logo"></img>
+            {/* <img src="img/logo.png" alt="logo"></img> */}
             <h3 className='header'>BoardCheck</h3>
           </div>
           <div className='options-container'>
-              <button
-                onClick={() => setTypingState("running")}
-                className="button-style"
-                style={{
-                  '--board-bg':             colors.boardBg,
-                  '--key-bg':               colors.keyBg,
-                  '--key-shadow':           colors.keyShadow,
-                  '--key-text':             colors.keyText,
-                  '--active-highlight':     colors.activeHighlight,
-                  '--clicked-key-bg':       colors.clickedKeyBg,
-                  '--clicked-key-text':     colors.clickedKeyText,
-                }}
-                >
-                Start WPM Test
-              </button>
+            <Typing colors={colors} onTestComplete={handleTestComplete} typingState={typingState} setTypingState={setTypingState} />
             <Store colors={colors} />
             <SoundSettings colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
             <ColorSettings colors={colors} updateColor={updateColor} resetColors={resetColors} />
-            <TbReload className="TbReload" onClick={resetKeyboard}/>
+            <FaSyncAlt onClick={resetKeyboard} style={{ fontSize:"30px", cursor:"pointer" }}/>
           </div>
         </div>
-        <div id='typing-section' >
-          <Typing colors={colors} pressed={pressed} onTestComplete={handleTestComplete} typingState={typingState} setTypingState={setTypingState} />
-        </div>
         <div id='keyboard-section'>
-          <Board setPressed={setPressed} realTimeKeys={realTimeKeys} setRealTimeKeys={setRealTimeKeys} persistentKeys={persistentKeys} setPersistentKeys={setPersistentKeys} sound={sound} colors={colors} />
+          <Board realTimeKeys={realTimeKeys} setRealTimeKeys={setRealTimeKeys} persistentKeys={persistentKeys} setPersistentKeys={setPersistentKeys} sound={sound} colors={colors} />
         </div>
     </div>
   );

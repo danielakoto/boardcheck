@@ -5,14 +5,14 @@ export const Store = ({ colors }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <>
+    <div>
       {/* Toggle button */}
       <div
          onClick={() => setOpen(o => !o)}
          style={{
             background: open ? colors.keyBg : 'var(--bg)',
             color: 'var(--text)',
-            borderRadius: '6px',
+            borderRadius: '5px',
             padding: '4px',
             cursor: 'pointer',
             fontSize: '18px',
@@ -32,7 +32,8 @@ export const Store = ({ colors }) => {
         left: '12px',
         width: '709px',
         height: '273px',
-        background: 'var(--bg)',
+        background: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(5px)',
         color: 'var(--text)',
         padding: '8px',
         zIndex: 999,
@@ -47,9 +48,9 @@ export const Store = ({ colors }) => {
           <h3 style={{ margin: 0, fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>
             Store
           </h3>
-          <FaTimes onClick={() => setOpen(o => !o)}  style={{ margin: 0, fontSize: '14px', cursor: 'pointer' }} />
+          <FaTimes onClick={() => setOpen(o => !o)} className='icon-button' />
         </div>
       </div>
-    </>
+    </div>
   )
 }

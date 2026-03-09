@@ -20,7 +20,7 @@
    --super-bold: 900;
 
    //border
-   --border-radius: 0.3rem;
+   --border-radius: 5px;
    --border-underline: 0.3rem solid;
 
    //transition 
@@ -39,4 +39,21 @@
   justify-content: center;
   background-color: var(--bg);
   color: var(--text);
+}
+
+.icon-button {
+  margin: 0;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 5px;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  color: var(--text);
+  background-color: transparent;
+}
+
+.icon-button:hover {
+  background-color: var(--key-bg);
+  color: var(--key-text);
 }
