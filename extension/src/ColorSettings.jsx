@@ -55,7 +55,7 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
         boxShadow: 'var(--box-shadow)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',  width: '100%' }}>
-          <h3 style={{ margin: 0, fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+          <h3 style={{ margin: 0, fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.6 }}>
             Colors
           </h3>
           <FaTimes onClick={() => setOpen(o => !o)} className='icon-button' />

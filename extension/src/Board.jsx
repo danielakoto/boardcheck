@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import toast from 'react-hot-toast';
 
+import './Board.scss'
+
 // Array representing the key rows
 const KEYBOARD_LAYOUT = [
    ['Esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12','Insert','Home', 'Circle'],

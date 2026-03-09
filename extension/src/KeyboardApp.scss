@@ -41,122 +41,12 @@
 
 }
 
-#typing-section, #keyboard-section {
+#keyboard-section {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.keyboard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  background-color: var(--board-bg);;
-  border-radius: 5px;
-  box-shadow: var(--box-shadow);
-}
- 
- .keyboard-row {
-   display: flex;
-   margin-bottom: 4px;
- }
- 
-.key {
-  // min-width: fit-content;
-  position: relative;
-  width: 30px;
-  height: 30px;
-  padding: 4px;
-  margin: 2px;
-  top: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--key-bg);
-  border-radius: 5px;
-  border: 1px solid var(--black);
-  font-size: 10px;
-  font-weight: 600;
-  cursor: default;
-  box-shadow: 0 4px var(--key-shadow);
-  color: var(--key-text);
-  transition: background-color 0.2s, color 0.2s, top 0.2s, box-shadow 0.2s;
-}
-
-.key.active {
-  // margin: 2px;
-  top: 2px;
-  background-color: var(--active-highlight);
-  box-shadow: 0 0px var(--active-highlight);
-  // border: 0px solid transparent;  
-}
-
-.key.persistent {
-  background-color: var(--clicked-key-bg);  /* Clicked highlight color (green) */
-  color: var(--clicked-key-text);
-}
-
-
-.key-Esc {
-  width:30px;
-}
-.key-Space {
-  width: 204px;
-}
-
-.key-Enter {
-  width: 110px;
-}
-
-.key-Tab {
-  width: 70px;
-}
-
-.key-CapsLock {
-  width: 75px;
-}
-
-.key-Backspace {
-  width: 98px;
-}
-
-.key-Shift {
-  width: 92px;
-}
-
-.key-Ctrl, .key-Win, .key-Alt, .key-Fn {
-  width:45px;
-} 
-
-.key-← {
-  margin: 1px 1px 1px 28px;
-}
-.key-←.active {
-  margin: 2px 1px 0 28px !important;
-}
-
-.key-F1, .key-F5, .key-F9, .key-Insert {
-  margin-left: 8px;
-}
-
-.key-Slash {
-  width: 73px;
-}
-.key-Quote {
-  width: 45px;
-}
-.key-Insert {
-  width: 35px;
-}
-.key-Home {
-  width: 35px;
-}
-.key-Circle {
-  border-radius: 50%;
-  margin-left: 8px;
 }
 
 #sound-selector {

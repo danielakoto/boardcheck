@@ -47,7 +47,7 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
             boxShadow: 'var(--box-shadow)',
          }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',  width: '100%' }}>
-               <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+               <h3 style={{ margin: 0, fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.6 }}>
                   Sounds
                </h3>
                <FaTimes onClick={() => setOpen(o => !o)} className='icon-button' />

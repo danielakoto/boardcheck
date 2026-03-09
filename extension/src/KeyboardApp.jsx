@@ -52,7 +52,7 @@ export const KeyboardApp = () => {
             <Store colors={colors} />
             <SoundSettings colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
             <ColorSettings colors={colors} updateColor={updateColor} resetColors={resetColors} />
-            <FaSyncAlt onClick={resetKeyboard} style={{ fontSize:"30px", cursor:"pointer" }}/>
+            <FaSyncAlt onClick={resetKeyboard} style={{ fontSize:"14px", cursor:"pointer" }}/>
           </div>
         </div>
         <div id='keyboard-section'>

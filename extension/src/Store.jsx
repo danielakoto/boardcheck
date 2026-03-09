@@ -26,29 +26,37 @@ export const Store = ({ colors }) => {
       </div>
 
       {/* Sidebar panel */}
-      <div style={{
+      <div style={{ 
+        width:'100%', 
+        height:'fit-content', 
+        padding:'12px',
         position: 'fixed',
-        bottom: open ? '12px' : '-290px',
-        left: '12px',
-        width: '709px',
-        height: '273px',
-        background: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(5px)',
-        color: 'var(--text)',
-        padding: '8px',
+        bottom: open ? '0px' : '-325px',
+        left: '0px',
         zIndex: 999,
         transition: 'bottom 0.3s ease',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '2x',
-        borderRadius: '5px',
-        boxShadow: 'var(--box-shadow)'
+        boxSizing: 'border-box'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',  width: '100%' }}>
-          <h3 style={{ margin: 0, fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Store
-          </h3>
-          <FaTimes onClick={() => setOpen(o => !o)} className='icon-button' />
+        <div style={{
+          width: '100%',
+          height: '287px',
+          padding: '8px',
+          background: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(5px)',
+          color: 'var(--text)',
+          display: 'flex',
+          borderRadius: '5px',
+          boxShadow: 'var(--box-shadow)',
+          flexDirection: 'column',
+          gap: '2x',
+          boxSizing: 'border-box'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',  width: '100%' }}>
+            <h3 style={{ margin: 0, fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.6 }}>
+              Store
+            </h3>
+            <FaTimes onClick={() => setOpen(o => !o)} className='icon-button' />
+          </div>
         </div>
       </div>
     </div>
