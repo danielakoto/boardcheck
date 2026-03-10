@@ -69,7 +69,7 @@ const KEY_PITCH_OVERRIDES = {
    'Shift':     semitones(-4),
 }
 
-export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersistentKeys, sound, colors }) => {
+export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersistentKeys, sound }) => {
    const audioContextRef = useRef(null)
    const audioBufferRef = useRef(null)
 
@@ -99,7 +99,7 @@ export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersis
    useEffect(() => {
       if (!sound?.sound) {
          audioBufferRef.current = null
-         toast.success("No sound selected.")
+         toast("No sound selected.")
          return
       }
 

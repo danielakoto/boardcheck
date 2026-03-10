@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
 const DEFAULTS = {
-  boardBg:          '#d3d3d3',
-  keyBg:            '#f5f5f5',
-  keyShadow:        '#666666',
-  keyText:          '#202020',
-  activeHighlight:  '#d7d7d7',
-  clickedKeyBg:     '#b0b0b0',
-  clickedKeyText:   '#7a7a7a',
+  boardBg:          '#262626',
+  keyBg:            '#424242',
+  keyShadow:        '#1a1a1a',
+  keyText:          '#bdbdbd',
+  activeHighlight:  '#0a0a0a',
+  clickedKeyBg:     '#1c1c1c',
+  clickedKeyText:   '#454545',
 }
 
 const STORAGE_KEY = 'boardcheck-colors'
