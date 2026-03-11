@@ -1,0 +1,141 @@
+
+#keyboard-section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#typing {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 4px;
+  gap: 4px;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  box-shadow: var(--box-shadow);
+
+  // In Typing.scss — add these alongside your existing word styles
+
+  .words {
+    max-height: 120px;      // ~3 rows
+    overflow: scroll;        // hide scrollbar, scroll is JS-driven
+    scroll-behavior: smooth;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8px;
+    width: 100%;
+    border-radius: 5px;
+    gap: 8px;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
+  }
+
+  #words::-webkit-scrollbar {
+    display: none;
+  }
+
+  .word {
+    letter-spacing: 1px;
+    color: var(--text);
+    opacity: 0.75;
+    transition: opacity 0.15s ease;
+    font-size: 14px;
+
+    &.word-active {
+      opacity: 1;
+    }
+
+    &.word-done-correct { opacity: 0.85 }
+    &.word-done-wrong   { opacity: 0.85; color: #f87171; }
+  }
+
+  // Per-character states
+  .char {
+    transition: color 0.08s ease;
+
+    &-pending { color: var(--text); }
+    &-correct { color: var(--text); opacity: 0.85; }
+    &-wrong   { color: #f87171; }         // red
+  }
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background-color: var(--text);
+  border-radius: 1px;
+  margin-right: 1px;
+  vertical-align: text-bottom;
+  &.ready-pulse {
+    animation: pulse 1s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+#typing-results {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 4px;
+  gap: 4px;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  box-shadow: var(--box-shadow);
+}
+
+/* Stats Bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.stat-card {
+  display: flex;
+  justify-content: space-between;
+  border: none;
+  background: transparent;
+  backdrop-filter: blur(1px);
+  border-radius: 5px;
+  padding: 8px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-label {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  height: 4px;
+  background: var(--bg);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--board-bg), var(--key-bg));
+  transition: width 0.3s ease;
+  border-radius: 9999px;
+}
