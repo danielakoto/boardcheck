@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaStore } from "react-icons/fa";
 
 export const Store = ({ colors }) => {
   const [open, setOpen] = useState(false)
@@ -20,9 +20,14 @@ export const Store = ({ colors }) => {
             writingMode: 'vertical-rl',
             letterSpacing: '2px',
             // boxShadow: open ? 'none' : 'var(--box-shadow)'
+            height: '25px',
+            width: '25px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
          }}
       >
-        🏪
+        <FaStore />
       </div>
 
       {/* Sidebar panel */}

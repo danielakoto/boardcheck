@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaVolumeDown } from "react-icons/fa";
 
 import { SoundSelector } from './SoundSelector'
 
@@ -22,9 +22,14 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
                writingMode: 'vertical-rl',
                letterSpacing: '2px',
                // boxShadow: open ? 'none' : 'var(--box-shadow)'
+               height: '25px',
+               width: '25px',
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center'
             }}
          >
-         🔉
+            <FaVolumeDown />
          </div>
 
          {/* Sidebar panel */}

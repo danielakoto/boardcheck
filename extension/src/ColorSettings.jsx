@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaPalette } from "react-icons/fa";
 
 const LABELS = {
   boardBg:             'Board Color',
@@ -30,9 +30,14 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
             writingMode: 'vertical-rl',
             letterSpacing: '2px',
             // boxShadow: open ? 'none' : 'var(--box-shadow)'
+            height: '25px',
+            width: '25px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
          }}
       >
-        🎨
+        <FaPalette />
       </div>
 
       {/* Sidebar panel */}
