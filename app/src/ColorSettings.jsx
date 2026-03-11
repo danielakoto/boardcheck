@@ -44,8 +44,8 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
       <div style={{
         position: 'fixed',
         bottom: '11px',
-        right: open ? '12px' : '-255px',
-        width: '220px',
+        right: open ? '12px' : '-450px',
+        width: '400px',
         height: 'fit-content',
         background: 'rgba(0, 0, 0, 0.75)',
         backdropFilter: 'blur(5px)',

@@ -4,7 +4,7 @@
       "name": "KTT Kang White Creamy",
       "description": "Zouya GMK67 + KTT Kang White Switch + Simple Cherry Keycaps",
       "category": "Poppy",
-      "sound": "../sounds/keyboard/default.mp3",
+      "sound": "/sounds/keyboard/default.mp3",
       "urls": [
          "https://www.aliexpress.us/item/3256803847820546.html",
          "https://www.aliexpress.us/item/3256805593846179.html",
@@ -17,7 +17,7 @@
       "name": "Nuphy Halo75 V2-IO",
       "description": "Nuphy Halo75 V2-IO + NuPhy Red Max Switch",
       "category": "Poppy",
-      "sound": "../sounds/keyboard/nuphy_halo75_v2io.mp3",
+      "sound": "/sounds/keyboard/nuphy_halo75_v2io.mp3",
       "urls": [
          "https://nuphy.com/products/nuphy-halo-v2-io?sca_ref=5278418.1KL4ifu5Zj",
          "https://nuphy.com/products/max-switches?sca_ref=5278418.1KL4ifu5Zj"
@@ -29,7 +29,7 @@
       "name": "KTT Vintage",
       "description": "MCHOSE GX87 + Ceramic Keycaps + KTT Vintage",
       "category": "Thocky",
-      "sound": "../sounds/keyboard/gx87_ceramic_ktt_vintage.mp3",
+      "sound": "/sounds/keyboard/gx87_ceramic_ktt_vintage.mp3",
       "urls": [
          "https://goaff.pro/escgjp",
          "https://www.cerakey.com/products/full-set-v2?variant=41532871377035"
@@ -41,7 +41,7 @@
       "name": "Akko Creamy Purple Pro",
       "description": "Womier SK75 + KiiBOOM Rainy Froggy Keycaps + Akko Creamy Purple Pro",
       "category": "Poppy",
-      "sound": "../sounds/keyboard/sk75_kiiboom_rainy_akko_creamy_purple.mp3",
+      "sound": "/sounds/keyboard/sk75_kiiboom_rainy_akko_creamy_purple.mp3",
       "urls": [
          "https://womierkeyboard.com/products/womier-sk75?sca_ref=6103295.YmVMPX9mS1",
          "https://en.akkogear.com/product/akko-v3-creamy-purple-pro-switch/?ref=SULCE",
@@ -54,7 +54,7 @@
       "name": "Deep Clicky - Akko Creamy Cyan",
       "description": "Womier SK75 + KiiBOOM Rainy Froggy Keycaps + Akko Creamy Cyan",
       "category": "Clicky",
-      "sound": "../sounds/keyboard/sk75_kiiboom_rainy_akko_creamy_cyan.mp3",
+      "sound": "/sounds/keyboard/sk75_kiiboom_rainy_akko_creamy_cyan.mp3",
       "urls": [
          "https://en.akkogear.com/product/akko-creamy-cyan-switch/?ref=SULCE",
          "https://womierkeyboard.com/products/womier-sk75?sca_ref=6103295.YmVMPX9mS1",

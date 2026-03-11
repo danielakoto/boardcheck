@@ -298,32 +298,28 @@ export const Typing = ({ colors, onTestComplete, typingState, setTypingState }) 
 
    return (
       <div id='typing-section'>
-         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', position:'relative' }}>
-            <div
-               className='button'
-               onClick={handleWPMTestButton}
-               style={{
-                  background: (typingState === "running" || typingState === "ready") ? colors.keyBg : 'var(--bg)',
-                  color: (typingState === "running" || typingState === "ready") ? colors.keyText : 'var(--text)',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  transition: 'background 0.3s ease',
-                  letterSpacing: '2px'
-               }}
-            >
-               {(typingState === "running" || typingState === "ready") ? "Stop WPM Test" : "Start WPM Test"}
-            </div>
+         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+         <div
+            className='button'
+            onClick={handleWPMTestButton}
+            style={{
+               background: (typingState === "running" || typingState === "ready") ? colors.keyBg : 'var(--bg)',
+               color: (typingState === "running" || typingState === "ready") ? colors.keyText : 'var(--text)',
+               borderRadius: '5px',
+               cursor: 'pointer',
+               transition: 'background 0.3s ease',
+               letterSpacing: '2px',
+            }}
+         >
+            {(typingState === "running" || typingState === "ready") ? "Stop WPM Test" : "Start WPM Test"}
+         </div>
 
             {/* Quick-start hint — only show when idle or finished */}
             {(typingState !== "running" && typingState !== "ready") && (
                <div style={{
-                  position:'absolute',
-                  top:'25px',
-                  left:'-10px',
                   fontSize: '10px',
                   letterSpacing: '1.5px',
                   textTransform: 'uppercase',
-                  width:'150px',
                   opacity: 0.35,
                }}>
                   or press <kbd style={{ fontFamily: 'inherit' }}>Shift</kbd> + <kbd style={{ fontFamily: 'inherit' }}>Enter</kbd>

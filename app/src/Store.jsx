@@ -40,10 +40,13 @@ export const Store = ({ colors }) => {
         left: '0px',
         zIndex: 999,
         transition: 'bottom 0.3s ease',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center'
       }}>
         <div style={{
-          width: '100%',
+          width: '1000px',
           height: '287px',
           padding: '8px',
           background: 'rgba(0, 0, 0, 0.75)',

@@ -38,17 +38,17 @@
   }
 
   .word {
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     color: var(--text);
     opacity: 0.75;
     transition: opacity 0.15s ease;
-    font-size: 14px;
+    font-size: 20px;
 
     &.word-active {
       opacity: 1;
     }
 
-    &.word-done-correct { opacity: 0.85 }
+    &.word-done-correct { opacity: 0.85; }
     &.word-done-wrong   { opacity: 0.85; color: #f87171; }
   }
 

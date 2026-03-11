@@ -19,7 +19,7 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
                cursor: 'pointer',
                fontSize: '18px',
                transition: 'background 0.3s ease',
-               writingMode: 'vertical-rl',
+               // writingMode: 'vertical-rl',
                letterSpacing: '2px',
                // boxShadow: open ? 'none' : 'var(--box-shadow)'
                height: '25px',
@@ -36,9 +36,9 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
          <div style={{
             position: 'fixed',
             bottom: '11px',
-            left: open ? '12px' : '-274px',
-            width: '250px',
-            height: '273px',
+            left: open ? '12px' : '-500px',
+            width: '400px',
+            height: '500px',
             background: 'rgba(0, 0, 0, 0.75)',
             backdropFilter: 'blur(5px)',
             color: 'var(--text)',
