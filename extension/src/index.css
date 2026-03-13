@@ -33,10 +33,15 @@ button, .button {
   font-size: 12px;
   font-weight: 500;
   font-family: inherit;
-  background-color: var(--board-bg);
+  background-color: var(--key-bg);
+  color: var(--key-text);
   cursor: pointer;
   transition: border-color 0.25s;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+input {
+  outline: none;
 }

@@ -1,5 +1,14 @@
 [
    {
+      "id": "default",
+      "name": "No Sound",
+      "description": "",
+      "category": "",
+      "sound": "",
+      "urls": [],
+      "tags": ["silent"]
+   },
+   {
       "id": "zuoya_gmk_ktt_kang_white",
       "name": "KTT Kang White Creamy",
       "description": "Zouya GMK67 + KTT Kang White Switch + Simple Cherry Keycaps",
@@ -63,12 +72,33 @@
       "tags": ["clicky", "deep"]
    },
    {
-      "id": "Default",
-      "name": "No Sound",
-      "description": "",
-      "category": "",
-      "sound": "",
-      "urls": [],
-      "tags": ["silent"]
+      "id": "kiiboom_phamtom81_lite",
+      "name": "Deep Creamy - KiiBOOM Phantom81",
+      "description": "KiiBOOM Phantom81",
+      "category": "Creamy",
+      "sound": "/sounds/keyboard/kiiboom_phamtom81_lite.mp3",
+      "urls": [
+      ],
+      "tags": ["creamy", "deep"]
+   },
+   {
+      "id": "m1v5_metal_keycaps_akko_creamy_purple",
+      "name": "Metal Cling Thock",
+      "description": "Monsgeek M1V5 + Akko Creamy Pro + Awekeys Metal Keycaps",
+      "category": "Thocky",
+      "sound": "/sounds/keyboard/m1v5_metal_keycaps_akko_creamy_purple.mp3",
+      "urls": [
+      ],
+      "tags": ["thocky", "deep"]
+   },
+   {
+      "id": "neo65_gateron_smoothie_gummy_keycaps",
+      "name": "Clacky",
+      "description": "Neo65 + Gateron Smoothie + Gummy Keycaps",
+      "category": "Thocky",
+      "sound": "/sounds/keyboard/neo65_gateron_smoothie_gummy_keycaps.mp3",
+      "urls": [
+      ],
+      "tags": ["clacky", "deep"]
    }
 ]

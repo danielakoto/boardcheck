@@ -16,10 +16,17 @@
       "128": "img/logo-128.png"
     }
   },
-  "permissions": ["storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "identity"],
   "host_permissions": [
     "<all_urls>"
   ],
+  "oauth2": {
+    "client_id": "91837916881-2iv97qbgui7aesdc0p0aqar1al1385s6.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
+  },
   "web_accessible_resources": [
     {
       "resources": ["sounds/keyboard/*.mp3", "img/*.png"],
