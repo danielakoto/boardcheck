@@ -14,7 +14,7 @@ import sounds from "./sounds.json"
 
 import './App.scss'; // We'll define the CSS later
 
-export const KeyboardApp = () => {
+export const App = () => {
   const [menu, setMenu] = useState(true)
   const [realTimeKeys, setRealTimeKeys] = useState({}); 
   const [persistentKeys, setPersistentKeys] = useState({});
