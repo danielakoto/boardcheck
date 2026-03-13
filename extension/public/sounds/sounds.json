@@ -13,7 +13,7 @@
       "name": "KTT Kang White Creamy",
       "description": "Zouya GMK67 + KTT Kang White Switch + Simple Cherry Keycaps",
       "category": "Poppy",
-      "sound": "../sounds/keyboard/default.mp3",
+      "sound": "../sounds/keyboard/zuoya_gmk_ktt_kang_white.mp3",
       "urls": [
          "https://www.aliexpress.us/item/3256803847820546.html",
          "https://www.aliexpress.us/item/3256805593846179.html",
@@ -78,6 +78,7 @@
       "category": "Creamy",
       "sound": "/sounds/keyboard/kiiboom_phamtom81_lite.mp3",
       "urls": [
+         "https://www.kiiboom.com/products/kiiboom-phantom81-lite"
       ],
       "tags": ["creamy", "deep"]
    },
@@ -88,6 +89,9 @@
       "category": "Thocky",
       "sound": "/sounds/keyboard/m1v5_metal_keycaps_akko_creamy_purple.mp3",
       "urls": [
+         "https://www.monsgeek.com/product/m1-v5-via-rapid-disassembly/?ref=sulcetech",
+         "https://en.akkogear.com/product/akko-v3-creamy-purple-pro-switch/?ref=SULCE",
+         "https://awekeys.com/pages/wild-ice"
       ],
       "tags": ["thocky", "deep"]
    },
@@ -98,6 +102,9 @@
       "category": "Thocky",
       "sound": "/sounds/keyboard/neo65_gateron_smoothie_gummy_keycaps.mp3",
       "urls": [
+         "https://www.qwertykeys.com/products/neo65-1?variant=43882015162611",
+         "https://amzn.to/3y8Nqbp",
+         "https://www.aliexpress.us/item/3256804831313643.html"
       ],
       "tags": ["clacky", "deep"]
    }
