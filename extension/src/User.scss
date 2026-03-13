@@ -1,0 +1,79 @@
+#user-content {
+   display: flex;
+   flex-direction: column;
+   gap: 4px;
+   align-items: center;
+   justify-content: space-between;
+   flex-grow: 1;
+
+   #user-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+  
+      #user-photo {
+         height: 56px;
+         width: 56px;
+         border-radius: var(--border-radius);
+      }
+
+      #user-main {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+      }
+   }
+
+
+   .user-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: '9px';
+      letter-spacing: '3px';
+      text-transform: 'uppercase';
+      font-weight: 700;
+      color: var(--text);
+      width: 100%;
+   }
+
+   .user-wpm {
+      font-size: 56px;
+      font-weight: 800;
+      color: var(--key-text);
+      letter-spacing: -2px;
+      -webkit-text-stroke: 2px var(--key-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   }
+
+   
+   .user-stat-card {
+      display: flex;
+      justify-content: space-between;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      transition: all 0.3s ease;
+      width: 100%;
+   }
+
+   .user-stat-label {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.6;
+   }
+   
+   .user-stat-value {
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+   }
+}

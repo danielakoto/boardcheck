@@ -293,7 +293,7 @@ export const Typing = ({ colors, onTestComplete, typingState, setTypingState }) 
       if (wpm >= 35)  return { label: 'Average',         color: '#7ec8e3' }; // 45-59
       if (wpm >= 25)  return { label: 'Developing',      color: '#f0c060' }; // 30-44
       if (wpm >= 15)  return { label: 'Beginner',        color: '#f09060' }; // 15-29
-      return          { label: 'Keep Practicing',        color: '#ff2c2c' }; // 0-14
+      return          { label: 'Noob',        color: '#ff2c2c' }; // 0-14
    };
 
    return (
