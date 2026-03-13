@@ -49,25 +49,6 @@ const commonWords = {
    ],
 };
 
-// Grade label based on WPM
-const getRank = (wpm) => {
-   if (wpm >= 280) return { label: 'Omniscient',      color: '#ffffff' }; // 280-300
-   if (wpm >= 260) return { label: 'Transcendent',    color: '#ff6fff' }; // 260-279
-   if (wpm >= 240) return { label: 'Mythic',          color: '#e040fb' }; // 240-259
-   if (wpm >= 220) return { label: 'Legendary',       color: '#ffd700' }; // 220-239
-   if (wpm >= 200) return { label: 'Grandmaster',     color: '#ffaa00' }; // 200-219
-   if (wpm >= 175) return { label: 'Master',          color: '#f07612' }; // 175-199
-   if (wpm >= 150) return { label: 'Expert',          color: '#ff6b35' }; // 150-174
-   if (wpm >= 120) return { label: 'Elite',           color: '#60d890' }; // 120-149
-   if (wpm >= 100) return { label: 'Advanced',        color: '#00e5a0' }; // 100-119
-   if (wpm >= 75)  return { label: 'Proficient',      color: '#60b4f0' }; // 80-99
-   if (wpm >= 55)  return { label: 'Skilled',         color: '#a0c8ff' }; // 60-79
-   if (wpm >= 35)  return { label: 'Average',         color: '#7ec8e3' }; // 45-59
-   if (wpm >= 25)  return { label: 'Developing',      color: '#f0c060' }; // 30-44
-   if (wpm >= 15)  return { label: 'Beginner',        color: '#f09060' }; // 15-29
-   return          { label: 'Noob',        color: '#ff2c2c' }; // 0-14
-};
-
 // Preset modes you can offer users
 const modes = {
   easy:   { one: 0.10, two: 0.20, three: 0.40, four: 0.25, long: 0.05 },
@@ -99,7 +80,7 @@ const generateWords = (count = 50, distribution = modes.hard) => {
 };
 
 
-export const Typing = ({ user, colors, onTestComplete, typingState, setTypingState }) => {
+export const Typing = ({ colors, onTestComplete, typingState, setTypingState }) => {
    const [typed, setTyped] = useState("");
    const [timeElapsed, setTimeElapsed] = useState(0);
    const timerRef = useRef(null);
@@ -202,16 +183,14 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
       setTypingState('finished');
       const snapshot = typingWordStatusRef.current; // ← always fresh
       const minutes = testDuration / 60
-      const wpm = Math.round(snapshot.filter(i => i.correct).length / minutes)
 
       const results = {
-         wpm: wpm,
+         wpm: Math.round(snapshot.filter(i => i.correct).length / minutes),
          accuracy: snapshot.length === 0 ? 100 : Math.round((snapshot.filter(i => i.correct).length / snapshot.length) * 100),
          correctWords: snapshot.filter(i => i.correct).length,
          incorrectWords: snapshot.filter(i => !i.correct).length,
          timeElapsed,
-         totalWords: snapshot.length,
-         rank: getRank(wpm).label
+         totalWords: snapshot.length
       };
 
       setTestResults(results);
@@ -298,34 +277,49 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
       if (typingState === "finished") startTest();
    };
 
+   // Grade label based on WPM
+   const getGrade = (wpm) => {
+      if (wpm >= 280) return { label: 'Omniscient',      color: '#ffffff' }; // 280-300
+      if (wpm >= 260) return { label: 'Transcendent',    color: '#ff6fff' }; // 260-279
+      if (wpm >= 240) return { label: 'Mythic',          color: '#e040fb' }; // 240-259
+      if (wpm >= 220) return { label: 'Legendary',       color: '#ffd700' }; // 220-239
+      if (wpm >= 200) return { label: 'Grandmaster',     color: '#ffaa00' }; // 200-219
+      if (wpm >= 175) return { label: 'Master',          color: '#f07612' }; // 175-199
+      if (wpm >= 150) return { label: 'Expert',          color: '#ff6b35' }; // 150-174
+      if (wpm >= 120) return { label: 'Elite',           color: '#60d890' }; // 120-149
+      if (wpm >= 100) return { label: 'Advanced',        color: '#00e5a0' }; // 100-119
+      if (wpm >= 75)  return { label: 'Proficient',      color: '#60b4f0' }; // 80-99
+      if (wpm >= 55)  return { label: 'Skilled',         color: '#a0c8ff' }; // 60-79
+      if (wpm >= 35)  return { label: 'Average',         color: '#7ec8e3' }; // 45-59
+      if (wpm >= 25)  return { label: 'Developing',      color: '#f0c060' }; // 30-44
+      if (wpm >= 15)  return { label: 'Beginner',        color: '#f09060' }; // 15-29
+      return          { label: 'Noob',        color: '#ff2c2c' }; // 0-14
+   };
+
    return (
       <div id='typing-section'>
-         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', position:'relative' }}>
-            <div
-               className='button'
-               onClick={handleWPMTestButton}
-               style={{
-                  background: (typingState === "running" || typingState === "ready") ? colors.keyBg : 'var(--bg)',
-                  color: (typingState === "running" || typingState === "ready") ? colors.keyText : 'var(--text)',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  transition: 'background 0.3s ease',
-                  letterSpacing: '2px'
-               }}
-            >
-               {(typingState === "running" || typingState === "ready") ? "Stop WPM Test" : "Start WPM Test"}
-            </div>
+         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+         <div
+            className='button'
+            onClick={handleWPMTestButton}
+            style={{
+               background: (typingState === "running" || typingState === "ready") ? colors.keyBg : 'var(--bg)',
+               color: (typingState === "running" || typingState === "ready") ? colors.keyText : 'var(--text)',
+               borderRadius: '5px',
+               cursor: 'pointer',
+               transition: 'background 0.3s ease',
+               letterSpacing: '2px',
+            }}
+         >
+            {(typingState === "running" || typingState === "ready") ? "Stop WPM Test" : "Start WPM Test"}
+         </div>
 
             {/* Quick-start hint — only show when idle or finished */}
             {(typingState !== "running" && typingState !== "ready") && (
                <div style={{
-                  position:'absolute',
-                  top:'25px',
-                  left:'-10px',
                   fontSize: '10px',
                   letterSpacing: '1.5px',
                   textTransform: 'uppercase',
-                  width:'150px',
                   opacity: 0.35,
                }}>
                   or press <kbd style={{ fontFamily: 'inherit' }}>Shift</kbd> + <kbd style={{ fontFamily: 'inherit' }}>Enter</kbd>
@@ -370,7 +364,7 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
 
                {/* Grade badge */}
                {(() => {
-               const grade = getRank(testResults.wpm);
+               const grade = getGrade(testResults.wpm);
                   return (
                      <div style={{
                         fontSize: '11px',
@@ -443,9 +437,10 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
                      Try Again
                   </div>
                </div>
-               {!user && (
-                  <div>Please sign in or register to save score.</div>
-               )}
+
+               {/* Retry button */}
+               <div>
+               </div>
             </div>
          </div>
          <div style={{ 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaLowVision } from "react-icons/fa";
 
 import { Board } from './Board';
 import { Typing } from './Typing';
@@ -10,11 +10,12 @@ import { Store } from './Store';
 import { useColors } from './useColors'
 import { useSounds } from './useSounds'
 
-import sounds from "../public/sounds/sounds.json"
+import sounds from "./sounds.json"
 
-import './KeyboardApp.scss'; // We'll define the CSS later
+import './App.scss'; // We'll define the CSS later
 
-export const KeyboardApp = () => {
+export const App = () => {
+  const [menu, setMenu] = useState(true)
   const [realTimeKeys, setRealTimeKeys] = useState({}); 
   const [persistentKeys, setPersistentKeys] = useState({});
   const [typingState, setTypingState] = useState("idle")
@@ -44,19 +45,27 @@ export const KeyboardApp = () => {
       }}>
         <div id="keyboard-header-container">
           <div id='keyboard-logo'>
-            {/* <img src="img/logo.png" alt="logo"></img> */}
-            <h3 className='header'>BoardCheck</h3>
+            {menu && (<>
+              {/* <img src="img/logo.png" alt="logo"></img> */}
+              <h3 className='header'>BoardCheck</h3>
+            </>)}
           </div>
           <div className='options-container'>
-            <Typing colors={colors} onTestComplete={handleTestComplete} typingState={typingState} setTypingState={setTypingState} />
-            <Store colors={colors} />
-            <SoundSettings colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
-            <ColorSettings colors={colors} updateColor={updateColor} resetColors={resetColors} />
-            <FaSyncAlt onClick={resetKeyboard} style={{ fontSize:"14px", cursor:"pointer" }}/>
+            {menu && (<>
+              <Store colors={colors} />
+              <SoundSettings colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
+              <ColorSettings colors={colors} updateColor={updateColor} resetColors={resetColors} />
+              <FaSyncAlt className='icon-button' onClick={resetKeyboard} style={{ fontSize:"14px", cursor:"pointer" }}/>
+            </>)}
+            
           </div>
         </div>
         <div id='keyboard-section'>
           <Board realTimeKeys={realTimeKeys} setRealTimeKeys={setRealTimeKeys} persistentKeys={persistentKeys} setPersistentKeys={setPersistentKeys} sound={sound} colors={colors} />
+        </div>
+        <div style={{ position:'absolute', top:'8px', right:'8px', display:'flex', gap:'8px' }}>
+          <Typing colors={colors} onTestComplete={handleTestComplete} typingState={typingState} setTypingState={setTypingState} />
+          <FaLowVision className='icon-button' onClick={() => setMenu(o => !o)} style={{ fontSize:"14px", cursor:"pointer", opacity:'0.5', aspectRatio:' 1/1' }}/>
         </div>
     </div>
   );

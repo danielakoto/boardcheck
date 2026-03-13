@@ -67,12 +67,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       updateDetails(sendResponse)
       return true
   }
-  if(message.action === "saveScores") {
-    const { results } = message;
-
-      saveScores(results, sendResponse)
-      return true
-  }
 });
 
 async function signUp(email, password, sendResponse) {
@@ -234,11 +228,11 @@ async function getUserData() {
     const { token } = await chrome.storage.local.get("token");
 
     const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/get-user-data", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
     })
 
     const data = await res.json()
@@ -262,36 +256,6 @@ const getGoogleToken = () => {
             resolve(token);
         });
     });
-}
-
-const saveScores = async (results, sendResponse) => {
-  console.log(results)
-  try {
-    const { token } = await chrome.storage.local.get("token");
-    const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-scores", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "wpm": results.wpm,
-        "accuracy": results.accuracy,
-        "correctWords": results.correctWords,
-        "incorrectWords": results.incorrectWords,
-        "timeElapsed": results.timeElapsed,
-        "totalWords": results.totalWords,
-        "rank": results.rank
-      })
-    });
-    const data = await res.json()
-
-    initUserDetails()
-    
-    sendResponse({ res: "Success",  data: data});
-  } catch (error) {
-    sendResponse({ res: `Error: ${error}` });   
-  }
 }
 
 const payment = async (sendResponse) => {
