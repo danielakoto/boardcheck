@@ -30,23 +30,22 @@ export const Store = ({ colors }) => {
         <FaStore />
       </div>
 
-      {/* Sidebar panel */}
-      <div style={{ 
-        width:'100%', 
-        height:'fit-content', 
+      <div onClick={() => setOpen(o => !o)} style={{ 
+        width:'100vw', 
+        height:'100vh', 
         padding:'12px',
         position: 'fixed',
-        bottom: open ? '0px' : '-325px',
+        bottom: open ? '0px' : '-500px',
         left: '0px',
         zIndex: 999,
         transition: 'bottom 0.3s ease',
         boxSizing: 'border-box',
         display:'flex',
-        alignItems:'center',
+        alignItems:'end',
         justifyContent:'center'
       }}>
-        <div style={{
-          width: '1000px',
+        <div onClick={(e) => e.stopPropagation()} style={{
+          width: '100%',
           height: '287px',
           padding: '8px',
           background: 'rgba(0, 0, 0, 0.75)',

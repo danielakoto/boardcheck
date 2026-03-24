@@ -15,61 +15,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const auth = getAuth(app);
 const functions = getFunctions(app, 'us-east4')
 
-console.log("background script loaded")
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-
-  if (message.action === "signUp") {
-      const { email, password } = message;
-
-      console.log("hit sign up function")
-
-      // Ensure async response by returning true
-      signUp(email, password, sendResponse);
-      return true; 
-  }
-  
-  if (message.action === "signIn") {
-      const { email, password } = message;
-
-      // Ensure async response by returning true
-      signIn(email, password, sendResponse );
-      return true  
-  }
-  if (message.action === "signInWithGoogle") {
-      // const { email, password } = message;
-
-      // Ensure async response by returning true
-      signInWithGoogle(sendResponse);
-      return true  
-  }
-  if (message.action === "signOut") {
-
-      // Ensure async response by returning true
-      signOutUser(sendResponse);
-      return true  
-  }
-  if (message.action === "checkToken") {
-      (async () => {
-          try {
-              const { token } = message;
-              const result = await checkToken(token);
-              sendResponse({ res: result })
-          } catch (error) {
-              sendResponse({ res: error })
-          }
-      })();
-      return true  
-  }
-  if(message.action === "initUserDetails") {
-      updateDetails(sendResponse)
-      return true
-  }
-});
-
-async function signUp(email, password, sendResponse) {
+export const signUp = async (email, password) => {
   console.log("trying to sign up")
     try {
         const userCredential = await createUserWithEmailAndPassword(
@@ -90,22 +39,22 @@ async function signUp(email, password, sendResponse) {
             }
         });
         
-        chrome.storage.local.set({ token: token })
-        chrome.storage.local.set({ scan: true })
+        localStorage.setItem("token", token);
+        localStorage.setItem("scan", true)
 
         initUserDetails()
         
-        sendResponse({ res: "Success" });
+        return({ res: "Success" });
     } catch (error) {
         if (error.code === "auth/email-already-in-use") {
-            sendResponse({ res: `Account already exists. Please sign in..` });
+            return({ res: `Account already exists. Please sign in..` });
         } else {
-            sendResponse({ res: `Error signing up. Please try again.` });
+            return({ res: `Error signing up. Please try again.` });
         }
     }
 }
 
-async function signIn(email, password, sendResponse) {
+export const signIn = async (email, password) => {
 
     try {
         let username = ""
@@ -118,7 +67,7 @@ async function signIn(email, password, sendResponse) {
             username = user.email
             const token = await user.getIdToken(true);
             
-            chrome.storage.local.set({ token: token })
+            localStorage.setItem("token", token);
             
             initUserDetails()
             
@@ -126,12 +75,12 @@ async function signIn(email, password, sendResponse) {
             throw new Error(`${error}`);
         });
         
-        sendResponse({ res: "Success", user: username });
+        return({ res: "Success", user: username });
     } catch (error) {
-        sendResponse({ res: `Error signing in. Please try again.${error}` });
+        return({ res: `Error signing in. Please try again.${error}` });
     }
 }
-const signInWithGoogle = async (sendResponse) => {
+export const signInWithGoogle = async () => {
     try {
         // 1. Get access token via Chrome identity
         const accessToken = await getGoogleToken();
@@ -170,95 +119,93 @@ const signInWithGoogle = async (sendResponse) => {
         }
 
         // 7. Store token and defaults
-        await chrome.storage.local.set({ token });
+        localStorage.setItem("token", token);
+        console.log(token)
 
-        // 8. Load user's credits, plan, etc.
         await initUserDetails();
 
-        sendResponse({ res: "Success" });
+        return({ res: "Success" });
 
     } catch (error) {
         console.error("Google sign-in error:", error);
-        sendResponse({ res: `Error signing in. Please try again. ${error.message}` });
+        return({ res: `Error signing in. Please try again. ${error.message}` });
     }
 }
 
-async function signOutUser(sendResponse) {
+export const signOutUser = async () => {
     try {
-        chrome.identity.getAuthToken({ interactive: false }, async (token) => {
-            if (token) {
-                await fetch(`https://accounts.google.com/o/oauth2/revoke?token=${token}`);
-                chrome.identity.removeCachedAuthToken({ token });
-            }
-        });
-        signOut(auth).then(() => {
-            chrome.storage.local.set({ token: null })
-            chrome.storage.local.set({ user: null })
+        const token = localStorage.getItem("token");
 
-            return "Success"
-        })
-        signOutUserGoogle()
-        sendResponse({ res: "Success" });
-    } catch (error) {
-        sendResponse({ res: `Error: ${error}, Please try again.` });
-    }
-}
+        if (token) {
+            // Revoke the token
+            await fetch(`https://accounts.google.com/o/oauth2/revoke?token=${token}`);
 
-const signOutUserGoogle = async () => {
-    try {
-        // 1. Get the cached token to revoke it
-        
-    } catch (error) {
-        console.error("Sign out error:", error);
-    }
-}
-
-const initUserDetails = async () => {
-    const authUser = auth.currentUser;
-    if(!authUser) {
-        return 
-    }
-    
-    const user = await getUserData()
-
-    chrome.storage.local.set({ user: user })
-}
-
-async function getUserData() {
-    const { token } = await chrome.storage.local.get("token");
-
-    const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/get-user-data", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            // Revoke via GIS (clears the client-side session)
+            google.accounts.oauth2.revoke(token, () => {
+                console.log('Token revoked');
+            });
         }
-    })
 
+        await signOut(auth);
+
+        localStorage.setItem("token", null);
+        localStorage.setItem("user", null);
+
+        return { res: "Success" };
+    } catch (error) {
+        return { res: `Error: ${error}, Please try again.` };
+    }
+};
+
+export const saveScores = async (results) => {
+  console.log(results)
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-scores", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "wpm": results.wpm,
+        "accuracy": results.accuracy,
+        "correctWords": results.correctWords,
+        "incorrectWords": results.incorrectWords,
+        "timeElapsed": results.timeElapsed,
+        "totalWords": results.totalWords,
+        "rank": {
+            "label": "Noob",
+            "color": "#ff2c2c"
+        },
+        "level": {
+            "level": 0,
+            "next": {}
+        }
+      })
+    });
     const data = await res.json()
 
-    return data;
+    initUserDetails()
+    
+    return({ res: "Success",  data: data});
+  } catch (error) {
+    return({ res: `Error: ${error}` });   
+  }
 }
 
-const getGoogleToken = () => {
-    return new Promise((resolve, reject) => {
-        chrome.identity.getAuthToken({ interactive: true }, (token) => {
-            if (chrome.runtime.lastError) {
-                console.error('getAuthToken error:', chrome.runtime.lastError.message);
-                reject(chrome.runtime.lastError);
-                return;
-            }
-            if (!token) {
-                console.error('getAuthToken: no token returned');
-                reject(new Error('No token returned'));
-                return;
-            }
-            resolve(token);
-        });
-    });
+export const getLeaderboard = async () => {
+    try {
+        const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/get-leaderboard");
+        const data = await res.json()
+        
+        return({ res: "Success",  data: data});
+    } catch (error) {
+        return({ res: `Error: ${error}` });   
+    }
 }
 
-const payment = async (sendResponse) => {
+const payment = async () => {
     try {
         const uid = getUserUID()
         const functionRef = httpsCallable(functions, 'ext-firestore-stripe-payments-createPortalLink');
@@ -271,8 +218,64 @@ const payment = async (sendResponse) => {
 
         initUserDetails()
 
-        sendResponse({ res: "Success", url: data.url });
+        return({ res: "Success", url: data.url });
     } catch (error) {
-        sendResponse({ res: `Error: ${error}` });   
+        return({ res: `Error: ${error}` });   
     }
 }
+
+const initUserDetails = async () => {
+    const authUser = auth.currentUser;
+    if(!authUser) {
+        return 
+    }
+    
+    const user = await getUserData()
+
+    localStorage.setItem("user", JSON.stringify(user))
+}
+
+async function getUserData() {
+    const token = localStorage.getItem("token");
+
+    console.log(token)
+    console.log("token ^")
+
+    const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/get-user-data", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    const data = await res.json()
+
+    return data;
+}
+
+const getGoogleToken = () => {
+    console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID)
+    return new Promise((resolve, reject) => {
+        const client = google.accounts.oauth2.initTokenClient({
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        scope: "openid email profile",  // your required scopes
+        callback: (response) => {
+            if (response.error) {
+            console.error('getAuthToken error:', response.error);
+            reject(new Error(response.error));
+            return;
+            }
+            if (!response.access_token) {
+            console.error('getAuthToken: no token returned');
+            reject(new Error('No token returned'));
+            return;
+            }
+            resolve(response.access_token);
+        },
+        });
+
+        client.requestAccessToken({ prompt: 'consent' });
+    });
+};
+

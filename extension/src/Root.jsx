@@ -1,7 +1,7 @@
 import { Toaster } from 'react-hot-toast';
 import { App } from './App'
 
-import './Root.scss'
+import './styles/Root.scss'
 
 function Root() {
   return (

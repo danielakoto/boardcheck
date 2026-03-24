@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import toast from 'react-hot-toast';
 
-import './Board.scss'
+import '../styles/Board.scss'
 
 // Array representing the key rows
 const KEYBOARD_LAYOUT = [

@@ -18,36 +18,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const functions = getFunctions(app, 'us-east4')
 
-console.log("background script loaded")
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-
   if (message.action === "signUp") {
       const { email, password } = message;
-
-      console.log("hit sign up function")
-
-      // Ensure async response by returning true
       signUp(email, password, sendResponse);
       return true; 
   }
-  
   if (message.action === "signIn") {
       const { email, password } = message;
-
-      // Ensure async response by returning true
       signIn(email, password, sendResponse );
       return true  
   }
   if (message.action === "signInWithGoogle") {
-      // const { email, password } = message;
-
-      // Ensure async response by returning true
       signInWithGoogle(sendResponse);
       return true  
   }
   if (message.action === "signOut") {
-
-      // Ensure async response by returning true
       signOutUser(sendResponse);
       return true  
   }
@@ -75,7 +61,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-async function signUp(email, password, sendResponse) {
+const signUp = async (email, password, sendResponse) => {
   console.log("trying to sign up")
     try {
         const userCredential = await createUserWithEmailAndPassword(
@@ -111,7 +97,7 @@ async function signUp(email, password, sendResponse) {
     }
 }
 
-async function signIn(email, password, sendResponse) {
+const signIn = async (email, password, sendResponse) => {
 
     try {
         let username = ""
@@ -189,7 +175,7 @@ const signInWithGoogle = async (sendResponse) => {
     }
 }
 
-async function signOutUser(sendResponse) {
+const signOutUser = async (sendResponse) => {
     try {
         chrome.identity.getAuthToken({ interactive: false }, async (token) => {
             if (token) {
@@ -203,21 +189,73 @@ async function signOutUser(sendResponse) {
 
             return "Success"
         })
-        signOutUserGoogle()
         sendResponse({ res: "Success" });
     } catch (error) {
         sendResponse({ res: `Error: ${error}, Please try again.` });
     }
 }
 
-const signOutUserGoogle = async () => {
+
+const saveScores = async (results, sendResponse) => {
+  console.log(results)
+  try {
+    const { token } = await chrome.storage.local.get("token");
+    const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-scores", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "wpm": results.wpm,
+        "accuracy": results.accuracy,
+        "correctWords": results.correctWords,
+        "incorrectWords": results.incorrectWords,
+        "timeElapsed": results.timeElapsed,
+        "totalWords": results.totalWords,
+        "rank": {
+            "label": "Noob",
+            "color": "#ff2c2c"
+        },
+        "level": {
+            "level": 0,
+            "next": {}
+        }
+      })
+    });
+    const data = await res.json()
+
+    initUserDetails()
+    
+    sendResponse({ res: "Success",  data: data});
+  } catch (error) {
+    sendResponse({ res: `Error: ${error}` });   
+  }
+}
+
+
+const payment = async (sendResponse) => {
     try {
-        // 1. Get the cached token to revoke it
-        
+        const uid = getUserUID()
+        const functionRef = httpsCallable(functions, 'ext-firestore-stripe-payments-createPortalLink');
+
+        const { data } = await functionRef({
+            customerId: uid,
+            returnUrl: "https://api-h4rwr3b4ca-uk.a.run.app/success",
+            configuration: "bpc_1StLe62LGH0KWWEEhC0CPx1u", // Optional ID of a portal configuration: https://stripe.com/docs/api/customer_portal/configuration
+        });
+
+        initUserDetails()
+
+        sendResponse({ res: "Success", url: data.url });
     } catch (error) {
-        console.error("Sign out error:", error);
+        sendResponse({ res: `Error: ${error}` });   
     }
 }
+
+
+
+// HELPER FUNCTIONS 
 
 const initUserDetails = async () => {
     const authUser = auth.currentUser;
@@ -230,7 +268,7 @@ const initUserDetails = async () => {
     chrome.storage.local.set({ user: user })
 }
 
-async function getUserData() {
+const getUserData = async () => {
     const { token } = await chrome.storage.local.get("token");
 
     const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/get-user-data", {
@@ -262,53 +300,4 @@ const getGoogleToken = () => {
             resolve(token);
         });
     });
-}
-
-const saveScores = async (results, sendResponse) => {
-  console.log(results)
-  try {
-    const { token } = await chrome.storage.local.get("token");
-    const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-scores", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "wpm": results.wpm,
-        "accuracy": results.accuracy,
-        "correctWords": results.correctWords,
-        "incorrectWords": results.incorrectWords,
-        "timeElapsed": results.timeElapsed,
-        "totalWords": results.totalWords,
-        "rank": results.rank
-      })
-    });
-    const data = await res.json()
-
-    initUserDetails()
-    
-    sendResponse({ res: "Success",  data: data});
-  } catch (error) {
-    sendResponse({ res: `Error: ${error}` });   
-  }
-}
-
-const payment = async (sendResponse) => {
-    try {
-        const uid = getUserUID()
-        const functionRef = httpsCallable(functions, 'ext-firestore-stripe-payments-createPortalLink');
-
-        const { data } = await functionRef({
-            customerId: uid,
-            returnUrl: "https://api-h4rwr3b4ca-uk.a.run.app/success",
-            configuration: "bpc_1StLe62LGH0KWWEEhC0CPx1u", // Optional ID of a portal configuration: https://stripe.com/docs/api/customer_portal/configuration
-        });
-
-        initUserDetails()
-
-        sendResponse({ res: "Success", url: data.url });
-    } catch (error) {
-        sendResponse({ res: `Error: ${error}` });   
-    }
 }

@@ -40,7 +40,7 @@ export const launchConfetti = (colors) => {
       width: 6 + Math.random() * 8,
       height: 10 + Math.random() * 6,
       opacity: 1,
-      gravity: 0.35 + Math.random() * 0.2,
+      gravity: 0.3 + Math.random() * 0.2,
     });
   }
 

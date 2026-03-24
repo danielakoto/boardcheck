@@ -3,13 +3,13 @@ import { Toaster } from 'react-hot-toast';
 import { App } from './App'
 
 import './index.css'
-import './Root.scss'
+import './styles/Root.scss'
 
 function Root() {
   return (
     <>
       <Toaster
-        position="bottom-center"
+        position="bottom-left"
         toastOptions={{
         className: '',
         duration: 4000,
