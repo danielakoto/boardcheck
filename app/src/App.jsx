@@ -52,6 +52,10 @@ export const App = () => {
     if(!user) {
       localStorage.setItem("user", JSON.stringify({
         "stats": {
+          "level": {
+            "level": "-",
+            "next": {}
+          },
           "wpm": results.wpm,
           "accuracy": results.accuracy,
           "correctWords": results.correctWords,

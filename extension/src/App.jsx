@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaSyncAlt } from "react-icons/fa";
 
-import { Login, User, Board, Typing, ColorSettings, SoundSettings, Store } from './components/index';
+import { Login, User, Board, Typing, ColorSettings, SoundSettings, Store, Leaderboard } from './components/index';
 
 import { useColors } from './functions/useColors'
 import { useSounds } from './functions/useSounds'
 
-import { launchConfetti } from '../functions/confetti.js'
+import { launchConfetti } from './functions/confetti.js'
 
 import sounds from "../public/sounds/sounds.json"
 
@@ -46,6 +46,10 @@ export const App = () => {
     if(!user) {
       chrome.storage.local.set({ user: {
         "stats": {
+          "level": {
+            "level": "-",
+            "next": {}
+          },
           "wpm": results.wpm,
           "accuracy": results.accuracy,
           "correctWords": results.correctWords,
@@ -154,6 +158,7 @@ export const App = () => {
           <div className='options-container'>
             <Typing user={user} colors={colors} onTestComplete={handleTestComplete} typingState={typingState} setTypingState={setTypingState} />
             <FaSyncAlt onClick={resetKeyboard} style={{ fontSize:"14px", cursor:"pointer" }}/>
+            <Leaderboard user={user} colors={colors} />
             <Store colors={colors} />
             <SoundSettings colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
             <ColorSettings colors={colors} updateColor={updateColor} resetColors={resetColors} />

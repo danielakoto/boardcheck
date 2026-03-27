@@ -59,6 +59,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       saveScores(results, sendResponse)
       return true
   }
+  if(message.action === "getLeaderboard") {
+      getLeaderboard(sendResponse)
+      return true
+  }
+
 });
 
 const signUp = async (email, password, sendResponse) => {
@@ -233,6 +238,16 @@ const saveScores = async (results, sendResponse) => {
   }
 }
 
+const getLeaderboard = async (sendResponse) => {
+    try {
+        const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/get-leaderboard");
+        const data = await res.json()
+        
+        sendResponse({ res: "Success", data: data});
+    } catch (error) {
+        sendResponse({ res: `Error: ${error}` });   
+    }
+}
 
 const payment = async (sendResponse) => {
     try {

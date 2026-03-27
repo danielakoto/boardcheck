@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast';
 import { FaTimes, FaCrown } from "react-icons/fa";
 
-import { getLeaderboard } from '../background'
+// import { getLeaderboard } from '../background'
 
 import '../styles/Leaderboard.scss'
 
@@ -19,11 +20,14 @@ export const Leaderboard = ({ user, colors }) => {
    const [error, setError] = useState(null);
    const [sortBy, setSortBy] = useState("wpm");
 
+   const sendMessage = (msg) =>
+      new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));
+
    useEffect(() => {
       const fetchLeaderboard = async () => {
          try {
             setLoading(true);
-            const res = await getLeaderboard();
+            const res = await sendMessage({ action: "getLeaderboard" });
             console.log(res)
             if (res?.res === "Success") { 
                setEntries(res.data.leaderboard);
@@ -92,21 +96,19 @@ export const Leaderboard = ({ user, colors }) => {
             height:'100vh', 
             padding:'12px',
             position: 'fixed',
-            bottom: open ? '0px' : '-100vh',
+            bottom: open ? '0px' : '-500px',
             left: '0px',
             zIndex: 999,
-            transition: 'bottom 0.3s ease, backdrop-filter 0.5s ease 0.3s',
+            transition: 'bottom 0.3s ease',
             boxSizing: 'border-box',
             display:'flex',
-            alignItems:'center',
+            alignItems:'end',
             justifyContent:'center',
-            backdropFilter: open ? 'blur(3px)' : 'blur(0px)',
          }}>
          <div style={{
-            width: '50%',
-            minWidth: '1000px',
-            height: '50%',
-            padding: '16px',
+            width: '100%',
+            height: '287px',
+            padding: '8px',
             background: 'rgba(0, 0, 0, 0.90)',
             backdropFilter: 'blur(5px)',
             color: 'var(--text)',

@@ -328,11 +328,12 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
                         <div style={{ fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', opacity: 0.5 }}>
                            Level
                         </div>
-                        {user.stats.level.next && (
+                        {(user.stats.level.next && user.stats.level.level !== "-") ? 
                            <div style={{ fontSize: '10px', letterSpacing: '1.5px', opacity: 0.4, marginTop: '2px' }}>
                               {user.stats.level.next.wordsNeeded?.toLocaleString() || 150} words &amp; {user.stats.level.next.testsNeeded || 5} tests to level {user.stats.level.level + 1 || 0}
                            </div>
-                        )}
+                           : <div style={{ fontSize: '10px', letterSpacing: '1.5px', opacity: 0.4, marginTop: '2px' }}>Please sign in to track level</div>
+                        }
                      </div>
                   )}
                </div>

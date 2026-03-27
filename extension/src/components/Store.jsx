@@ -11,12 +11,12 @@ export const Store = ({ colors }) => {
          onClick={() => setOpen(o => !o)}
          style={{
             background: open ? colors.keyBg : 'var(--bg)',
-            color: 'var(--text)',
+            color: open ? colors.keyText : 'var(--text)',
             borderRadius: '5px',
             padding: '4px',
             cursor: 'pointer',
             fontSize: '18px',
-            transition: 'background 0.3s ease',
+            transition: 'background 0.3s ease, color 0.3s ease',
             writingMode: 'vertical-rl',
             letterSpacing: '2px',
             // boxShadow: open ? 'none' : 'var(--box-shadow)'
