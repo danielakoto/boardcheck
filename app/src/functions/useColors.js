@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { saveSettings } from '../background'
+
 const DEFAULTS = {
   boardBg:          '#262626',
   keyBg:            '#424242',
@@ -10,14 +12,26 @@ const DEFAULTS = {
   clickedKeyText:   '#454545',
 }
 
-const STORAGE_KEY = 'boardcheck-colors'
+const STORAGE_KEY = 'colors'
 
 export const useColors = () => {
    const [colors, setColors] = useState(() => {
       try {
-         const saved = localStorage.getItem(STORAGE_KEY)
+         let saved = localStorage.getItem(STORAGE_KEY)
+         let user = localStorage.getItem("user")
+         console.log(saved)
+         console.log(user)
+         console.log(JSON.parse(user))
+         user = JSON.parse(user)
+         if(user.settings.activeTheme) {
+            saved = user.settings.activeTheme
+            console.log("has preset colors")
+            console.log(saved)
+            return saved ? { ...DEFAULTS, ...saved } : DEFAULTS
+         }
          return saved ? { ...DEFAULTS, ...JSON.parse(saved) } : DEFAULTS
-      } catch {
+      } catch (error) {
+         console.log("Returning defaults: " + error)
          return DEFAULTS
       }
    })
@@ -28,6 +42,7 @@ export const useColors = () => {
          localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
          return next
       })
+      saveSettings()
    }
 
    const resetColors = () => {

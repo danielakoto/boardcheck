@@ -1,11 +1,17 @@
+/* eslint-disable no-undef */
 import { useState } from 'react'
 
-const STORAGE_KEY = 'boardcheck-sound'
+export const useSounds = (user, soundOptions) => {
+   const sendMessage = (msg) =>
+      new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));
 
-export const useSounds = (soundOptions) => {
-   const [sound, setSound] = useState(() => {
+   const [sound, setSound] = useState( async () => {
       try {
-         const saved = localStorage.getItem(STORAGE_KEY)
+         const { sound } = await chrome.storage.local.get("sound")
+         let saved = sound
+         if(user?.settings.activeSound) {
+            saved = user.settings.activeSound
+         }
          if (!saved) return soundOptions[0]
          const parsed = JSON.parse(saved)
          // Re-match against soundOptions in case URLs changed
@@ -15,9 +21,10 @@ export const useSounds = (soundOptions) => {
       }
    })
 
-   const updateSound = (newSound) => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: newSound.name }))
+   const updateSound = async (newSound) => {
+      await chrome.storage.local.set({ sound: JSON.stringify({ name: newSound.name })})
       setSound(newSound)
+      await sendMessage({ action: "saveSettings" })
    }
 
   return { sound, updateSound }

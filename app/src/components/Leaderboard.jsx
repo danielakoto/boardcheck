@@ -114,7 +114,7 @@ export const Leaderboard = ({ user, colors }) => {
             borderRadius: '5px',
             boxShadow: 'var(--box-shadow)',
             flexDirection: 'column',
-            gap: '2x',
+            gap: '4px',
             boxSizing: 'border-box'
          }}
             onClick={(e) => e.stopPropagation()}
@@ -127,13 +127,13 @@ export const Leaderboard = ({ user, colors }) => {
             </div>
             <div className="leaderboard-container">
                   <div className="leaderboard-header">
-                     <p className="leaderboard-subtitle">Top 100 typists on BoardCheck</p>
+                     <p className="leaderboard-subtitle" style={{ margin: 0, fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.6 }}>Top 100</p>
                      {/* Sort controls */}
                      <div className="leaderboard-sort-bar">
                         {[
+                           { key: "level",    label: "Level" },
                            { key: "wpm",      label: "WPM" },
                            { key: "accuracy", label: "Accuracy" },
-                           // { key: "level",    label: "Level" },
                            { key: "tests",    label: "Tests" },
                            // { key: "rank",     label: "Rank" },
                         ].map(({ key, label }) => (
@@ -159,7 +159,9 @@ export const Leaderboard = ({ user, colors }) => {
                               <th>#</th>
                               <th>Player</th>
                               <th>Rank</th>
-                              <th>Level</th>
+                              <th onClick={() => setSortBy("level")} className="sortable">
+                                 Level
+                              </th>
                               <th onClick={() => setSortBy("wpm")} className="sortable">
                                  WPM
                               </th>
@@ -167,7 +169,7 @@ export const Leaderboard = ({ user, colors }) => {
                                  Accuracy
                               </th>
                               <th onClick={() => setSortBy("tests")} className="sortable">
-                                 Tests
+                                 Completed
                               </th>
                            </tr>
                         </thead>
@@ -203,9 +205,8 @@ export const Leaderboard = ({ user, colors }) => {
                                                 {entry.displayName?.[0]?.toUpperCase() || "?"}
                                              </div>
                                           )}
-                                          <span className="player-name">
+                                          <span className={`player-name ${isMe && 'you-badge'}`}>
                                              {entry.displayName}
-                                             {isMe && <span className="you-badge">you</span>}
                                           </span>
                                        </div>
                                     </td>
@@ -228,7 +229,6 @@ export const Leaderboard = ({ user, colors }) => {
                                     {/* WPM */}
                                     <td className="col-wpm">
                                        <span className="wpm-value">{entry.wpm}</span>
-                                       <span className="wpm-unit"> wpm</span>
                                     </td>
 
                                     {/* Accuracy */}

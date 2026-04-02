@@ -26,10 +26,6 @@ export const User = ({ colors, user, setUser }) => {
       }
    }
 
-   useEffect(() => {
-
-   }, [])
-
    return (
    <>
          <div
@@ -104,7 +100,7 @@ export const User = ({ colors, user, setUser }) => {
                         }
                      </div>
                      {(() => {
-                        const grade = getRank(user.wpm);
+                        const grade = getRank(user.stats.wpm);
                            return (
                               <div style={{
                                  fontSize: '25px',
@@ -127,9 +123,10 @@ export const User = ({ colors, user, setUser }) => {
                   </div>
                   {[
                      { label: 'Level', value: user.stats.level.level },
+                     { label: 'Rank', value: user.earned.rank.label },
                      { label: 'Accuracy', value: `${user.stats.accuracy}%` },
+                     { label: 'Last WPM',  value: user.stats.lastWpm },
                      { label: 'Completed', value: user.stats.testsCompleted },
-                     { label: ' Last WPM',  value: user.stats.lastWpm },
                      ].map(({ label, value }) => (
                         <div key={label} className="user-stat-card" style={{ textAlign: 'center' }}>
                            <div className="user-stat-label">{label}</div>

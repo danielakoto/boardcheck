@@ -24,7 +24,9 @@ export const App = () => {
   const [loading, setLoading] = useState(false);
 
   const { colors, updateColor, resetColors } = useColors()
-  const { sound, updateSound } = useSounds(sounds)
+  const { sound, updateSound } = useSounds(user, sounds)
+
+  console.log(colors)
   
   const sendMessage = (msg) =>
     new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));

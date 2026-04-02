@@ -59,6 +59,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       saveScores(results, sendResponse)
       return true
   }
+  if(message.action === "saveSettings") {
+      saveSettings(sendResponse)
+      return true
+  }
   if(message.action === "getLeaderboard") {
       getLeaderboard(sendResponse)
       return true
@@ -236,6 +240,37 @@ const saveScores = async (results, sendResponse) => {
   } catch (error) {
     sendResponse({ res: `Error: ${error}` });   
   }
+}
+
+const saveSettings = async (sendResponse) => {
+    console.log("Running function")
+    try {
+        const { colors } = await chrome.storage.local.get("colors")
+        const { sound } = await chrome.storage.local.get("sound")
+        const { token } = await chrome.storage.local.get("token")
+        
+        console.log("Running saveSettings")
+        const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-settings", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                colors: JSON.parse(colors),
+                sound: JSON.parse(sound)
+            })
+        });
+        console.log(res)
+        
+        const data = await res.json()
+
+        initUserDetails()
+        
+        sendResponse({ res: "Success",  data: data});
+    } catch (error) {
+        sendResponse({ res: `Error: ${error}` });   
+    }
 }
 
 const getLeaderboard = async (sendResponse) => {

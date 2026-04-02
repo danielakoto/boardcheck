@@ -194,6 +194,35 @@ export const saveScores = async (results) => {
   }
 }
 
+export const saveSettings = async () => {
+  try {
+
+    const colors = localStorage.getItem('colors')
+    const sound = localStorage.getItem('sound')
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-settings", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        colors: JSON.parse(colors),
+        sound: JSON.parse(sound)
+      })
+    });
+    
+    const data = await res.json()
+
+    initUserDetails()
+    
+    return({ res: "Success",  data: data});
+  } catch (error) {
+    return({ res: `Error: ${error}` });   
+  }
+}
+
 export const getLeaderboard = async () => {
     try {
         const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/get-leaderboard");
@@ -238,9 +267,6 @@ const initUserDetails = async () => {
 async function getUserData() {
     const token = localStorage.getItem("token");
 
-    console.log(token)
-    console.log("token ^")
-
     const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/get-user-data", {
       method: "GET",
       headers: {
@@ -255,7 +281,6 @@ async function getUserData() {
 }
 
 const getGoogleToken = () => {
-    console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID)
     return new Promise((resolve, reject) => {
         const client = google.accounts.oauth2.initTokenClient({
         client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,

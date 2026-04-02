@@ -26,7 +26,7 @@ export const App = () => {
   const [loading, setLoading] = useState(false);
 
   const { colors, updateColor, resetColors } = useColors()
-  const { sound, updateSound } = useSounds(sounds)
+  const { sound, updateSound } = useSounds(user, sounds)
   
   // onAuthStateChanged(auth, (user) => {
   //   if(user) {

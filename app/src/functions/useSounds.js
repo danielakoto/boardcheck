@@ -1,11 +1,18 @@
 import { useState } from 'react'
 
-const STORAGE_KEY = 'boardcheck-sound'
+import { saveSettings } from '../background'
 
-export const useSounds = (soundOptions) => {
+const STORAGE_KEY = 'sound'
+
+export const useSounds = (user, soundOptions) => {
    const [sound, setSound] = useState(() => {
       try {
-         const saved = localStorage.getItem(STORAGE_KEY)
+         let saved = localStorage.getItem(STORAGE_KEY)
+         if(user.settings.activeSound) {
+            saved = user.settings.activeSound
+         } else {
+            saveSettings()
+         }
          if (!saved) return soundOptions[0]
          const parsed = JSON.parse(saved)
          // Re-match against soundOptions in case URLs changed
@@ -18,6 +25,7 @@ export const useSounds = (soundOptions) => {
    const updateSound = (newSound) => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: newSound.name }))
       setSound(newSound)
+      saveSettings()
    }
 
   return { sound, updateSound }

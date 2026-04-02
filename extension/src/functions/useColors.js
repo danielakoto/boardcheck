@@ -1,4 +1,5 @@
-import { useState } from 'react'
+/* eslint-disable no-undef */
+import { useState, useEffect } from 'react'
 
 const DEFAULTS = {
   boardBg:          '#262626',
@@ -10,29 +11,49 @@ const DEFAULTS = {
   clickedKeyText:   '#454545',
 }
 
-const STORAGE_KEY = 'boardcheck-colors'
-
 export const useColors = () => {
-   const [colors, setColors] = useState(() => {
-      try {
-         const saved = localStorage.getItem(STORAGE_KEY)
-         return saved ? { ...DEFAULTS, ...JSON.parse(saved) } : DEFAULTS
-      } catch {
-         return DEFAULTS
-      }
-   })
+   const sendMessage = (msg) =>
+      new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));
 
-   const updateColor = (key, value) => {
+   const [colors, setColors] = useState(DEFAULTS)
+
+   // Load colors from storage on mount
+   useEffect(() => {
+      const loadColors = async () => {
+         try {
+            const { colors, user } = await chrome.storage.local.get(["colors", "user"])
+            let saved = colors
+
+            if (user?.settings?.activeTheme) {
+               saved = user.settings.activeTheme
+               console.log("has preset colors")
+            }
+
+            setColors(saved ? { ...DEFAULTS, ...saved } : DEFAULTS)
+         } catch (error) {
+            console.log("Returning defaults: " + error)
+            setColors(DEFAULTS)
+         }
+      }
+
+      loadColors()
+   }, [])
+
+   const updateColor = async (key, value) => {
       setColors(prev => {
          const next = { ...prev, [key]: value }
-         localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+         chrome.storage.local.set({ colors: next })  // store as object, not stringified
          return next
       })
+      console.log("changed")
+      await sendMessage({ action: "saveSettings" })
    }
 
-   const resetColors = () => {
-      localStorage.removeItem(STORAGE_KEY)
+   const resetColors = async () => {
+      chrome.storage.local.remove("colors")
       setColors(DEFAULTS)
+      console.log("changed")
+      await sendMessage({ action: "saveSettings" })
    }
 
    return { colors, updateColor, resetColors }
