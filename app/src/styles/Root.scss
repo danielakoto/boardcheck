@@ -3,6 +3,7 @@
    //Colors
    --bg: #151515;
    --text: #f5f5f5;
+   --overlay-bg: rgba(0, 0, 0, 0.75);
    --orange: #FF4500;
    --blue: #1c49d0;
    --dark-transparent: rgb(14 14 14 / 75%);
@@ -29,6 +30,18 @@
    // Shadow
    --box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
    --box-shadow-small: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+//Root variables for global project os scss
+[data-theme="light"] {
+  //Colors
+  --bg: #f5f5f5;
+  --text: #0a0a0a;
+  --overlay-bg: rgba(255, 255, 255, 0.75);
+
+  // Shadow
+  --box-shadow: rgba(255, 255, 255, 0.25) 0px 54px 55px, rgba(255, 255, 255, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  --box-shadow-small: rgba(168, 168, 168, 0.2) 0px 2px 8px 0px;
 }
 
 #root {

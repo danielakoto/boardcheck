@@ -51,14 +51,14 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
         transition: 'right 0.3s ease',
         boxSizing: 'border-box',
         display:'flex',
-        alignItems:'end',
+        alignItems:'start',
         justifyContent:'end'
       }}>
         <div onClick={(e) => e.stopPropagation()} style={{
           position: 'fixed',
           width: '400px',
           height: 'fit-content',
-          background: 'rgba(0, 0, 0, 0.75)',
+          background: 'var(--overlay-bg)',
           backdropFilter: 'blur(5px)',
           color: 'var(--text)',
           padding: '16px',

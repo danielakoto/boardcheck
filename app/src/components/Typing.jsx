@@ -17,7 +17,7 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
    const [wordIndex, setWordIndex] = useState(0);
    const [typingWordStatus, setTypingWordStatus] = useState([]);
    const typingWordStatusRef = useRef([]); // add this
-   const [words, setWords] = useState(() => generateWords(50));
+   const [words, setWords] = useState(() => generateWords(50, user?.stats?.level?.level || 1));
    // Snapshot of completed test results for the modal
    const [testResults, setTestResults] = useState({
       wpm: 0,
@@ -47,7 +47,7 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
    // Append more words when running low
    useEffect(() => {
       if (words.length - wordIndex < 8) {
-         setWords(prev => [...prev, ...generateWords(10)]);
+         setWords(prev => [...prev, ...generateWords(10, user?.stats?.level?.level || 1)]);
       }
    }, [wordIndex, words.length]);
 
@@ -105,7 +105,7 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
          wpm: 0, accuracy: 0, correctWords: 0,
          incorrectWords: 0, timeElapsed: 0, totalWords: 0
       });
-      setWords(generateWords(50));
+      setWords(generateWords(50, user?.stats?.level?.level || 1));
    }, [setTypingState]);
 
    const endTest = useCallback(async () => {
@@ -330,7 +330,10 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
                         </div>
                         {(user.stats.level.next && user.stats.level.level !== "-") ? 
                            <div style={{ fontSize: '10px', letterSpacing: '1.5px', opacity: 0.4, marginTop: '2px' }}>
-                              {user.stats.level.next.wordsNeeded?.toLocaleString() || 150} words &amp; {user.stats.level.next.testsNeeded || 5} tests to level {user.stats.level.level + 1 || 0}
+                              { user.stats.level.next.wordsNeeded > 0 && ( <span>{user.stats.level.next.wordsNeeded?.toLocaleString() || 150} words</span> )}
+                              { user.stats.level.next.wordsNeeded > 0 && user.stats.level.next.testsNeeded > 0  && ( <span>&amp;</span> )}
+                              { user.stats.level.next.testsNeeded > 0 && ( <span>{user.stats.level.next.testsNeeded || 5} tests </span> )}
+                              <span>to level {user.stats.level.level + 1 || 0}</span>
                            </div>
                            : <div style={{ fontSize: '10px', letterSpacing: '1.5px', opacity: 0.4, marginTop: '2px' }}>Please sign in to track level</div>
                         }

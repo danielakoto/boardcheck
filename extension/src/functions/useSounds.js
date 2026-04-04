@@ -1,31 +1,38 @@
 /* eslint-disable no-undef */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-export const useSounds = (user, soundOptions) => {
-   const sendMessage = (msg) =>
-      new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));
+import { sendMessage } from './sendMessage.js'
 
-   const [sound, setSound] = useState( async () => {
-      try {
-         const { sound } = await chrome.storage.local.get("sound")
-         let saved = sound
-         if(user?.settings.activeSound) {
-            saved = user.settings.activeSound
+export const useSounds = (soundOptions) => {
+   const [sound, setSound] = useState(soundOptions[0])
+
+   useEffect(() => {
+      const loadSound = async () => {
+         try {
+            const { sound, user } = await chrome.storage.local.get(["sound", "user"])
+            let saved = JSON.parse(sound)
+
+            if (user?.settings?.activeSound) {
+               saved = user.settings.activeSound
+            }
+
+            if (!saved) return setSound(soundOptions[0])
+
+            // Re-match against soundOptions in case URLs changed
+            setSound(soundOptions.find(s => s.name === saved.name) ?? soundOptions[0])
+         } catch {
+            setSound(soundOptions[0])
          }
-         if (!saved) return soundOptions[0]
-         const parsed = JSON.parse(saved)
-         // Re-match against soundOptions in case URLs changed
-         return soundOptions.find(s => s.name === parsed.name) ?? soundOptions[0]
-      } catch {
-         return soundOptions[0]
       }
-   })
+
+      loadSound()
+   }, []) // soundOptions is defined at module level so it's stable — no need to include it
 
    const updateSound = async (newSound) => {
-      await chrome.storage.local.set({ sound: JSON.stringify({ name: newSound.name })})
+      await chrome.storage.local.set({ sound: JSON.stringify({ name: newSound.name }) })
       setSound(newSound)
       await sendMessage({ action: "saveSettings" })
    }
 
-  return { sound, updateSound }
+   return { sound, updateSound }
 }

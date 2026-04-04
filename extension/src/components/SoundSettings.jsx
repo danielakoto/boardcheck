@@ -53,7 +53,7 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
                position: 'fixed',
                width: '250px',
                height: '273px',
-               background: 'rgba(0, 0, 0, 0.75)',
+               background: 'var(--overlay-bg)',
                backdropFilter: 'blur(5px)',
                color: 'var(--text)',
                padding: '8px',

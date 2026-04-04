@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "BoardCheck - The simple keyboard checker.",
   "version": "1.0",
+  "key": "gnmdeencleiabgilnbbgiefcmclnpdoj",
   "description": "The most satisfying keyboard checker chrome extension.",
   "icons": {
     "16": "img/logo-128.png",
@@ -24,7 +25,7 @@
     "<all_urls>"
   ],
   "oauth2": {
-    "client_id": "91837916881-2iv97qbgui7aesdc0p0aqar1al1385s6.apps.googleusercontent.com",
+    "client_id": "91837916881-a4te4jthb482m1p0c331ul54g886k9dd.apps.googleusercontent.com",
     "scopes": ["openid", "email", "profile"]
   },
   "web_accessible_resources": [

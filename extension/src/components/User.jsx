@@ -3,16 +3,16 @@ import { useState } from "react";
 import toast from 'react-hot-toast';
 import { FaTimes, FaUser } from "react-icons/fa";
 
+import { Loading } from './index';
+
 import { getRank } from '../functions/useLevels.js';
+import { sendMessage } from '../functions/sendMessage.js'
 
 import '../styles/User.scss'
 
 export const User = ({ colors, user, setUser }) => {
    const [open, setOpen] = useState(false)
    const [loading, setLoading] = useState(false);
-
-   const sendMessage = (msg) =>
-      new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));
 
    const handleSignOut = async () => {
       setLoading(true);
@@ -56,17 +56,17 @@ export const User = ({ colors, user, setUser }) => {
          <div
             style={{
                display: 'flex',
-               alignItems: 'center',
-               justifyContent: 'center',
-               bottom: open ? '0' : '-100vh',
-               left: '0',
+               alignItems: 'end',
+               justifyContent: 'end',
+               top:'0px',
+               right: open ? '0px' : '-1000px',
                width:'100vw', 
                height: '100vh',
                position: 'fixed',
-               transition: 'bottom 0.3s ease, backdrop-filter 0.5s ease 0.3s',
                boxSizing: 'border-box',
                zIndex: 1001,
-               backdropFilter: open ? 'blur(3px)' : 'blur(0px)',
+               transition: 'right 0.3s ease',
+               padding:'12px',
             }}
             onClick={() => setOpen(o => !o)}
          >
@@ -75,8 +75,8 @@ export const User = ({ colors, user, setUser }) => {
                   // position: 'fixed',
                   // bottom: '11px',
                   width: '400px',
-                  height: 'fit-content',
-                  background: 'rgba(0, 0, 0, 0.75)',
+                  height: '288px',
+                  background: 'var(--overlay-bg)',
                   backdropFilter: 'blur(5px)',
                   color: 'var(--text)',
                   padding: '16px',
@@ -90,6 +90,7 @@ export const User = ({ colors, user, setUser }) => {
                }}
                onClick={(e) => e.stopPropagation()}
             >
+               { loading && (<Loading />) }
                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',  width: '100%' }}>
                   <h3 className='header'  style={{ margin: 0, fontSize: '13px', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.6 }}>User</h3>
                   <FaTimes onClick={() => setOpen(o => !o)} className='icon-button' />
@@ -138,7 +139,7 @@ export const User = ({ colors, user, setUser }) => {
                      ))
                   }
                   <div className="user-info">
-                     <div>{user.displayName ? user.displayName : user.email}</div>
+                     <div>{user?.email?.split('@')[0] || ""}</div>
                      <div className="button" onClick={handleSignOut} disabled={loading}>{loading ? "Signing Out…" : "Sign Out"}</div>
                   </div>
                </div>

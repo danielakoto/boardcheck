@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { FaTimes, FaCrown } from "react-icons/fa";
 
 import { getLeaderboard } from '../background'
+import { Loading } from "./index"
 
 import '../styles/Leaderboard.scss'
 
@@ -13,18 +14,17 @@ const RANK_ORDER = [
 ];
 
 export const Leaderboard = ({ user, colors }) => {
+   const [loading, setLoading] = useState(false);
    const [open, setOpen] = useState(false)
    const [entries, setEntries] = useState([]);
-   const [loading, setLoading] = useState(true);
-   const [error, setError] = useState(null);
    const [sortBy, setSortBy] = useState("wpm");
 
    useEffect(() => {
       const fetchLeaderboard = async () => {
+         setLoading(true)
          try {
             setLoading(true);
             const res = await getLeaderboard();
-            console.log(res)
             if (res?.res === "Success") { 
                setEntries(res.data.leaderboard);
             }
@@ -45,7 +45,7 @@ export const Leaderboard = ({ user, colors }) => {
       if (sortBy === "wpm") return b.wpm - a.wpm;
       if (sortBy === "accuracy") return b.accuracy - a.accuracy;
       if (sortBy === "level") return b.level - a.level;
-      if (sortBy === "tests") return b.testsCompleted - a.testsCompleted;
+      if (sortBy === "completed") return b.testsCompleted - a.testsCompleted;
       if (sortBy === "rank") {
          return RANK_ORDER.indexOf(b.earnedRank?.label) - RANK_ORDER.indexOf(a.earnedRank?.label);
       }
@@ -107,7 +107,7 @@ export const Leaderboard = ({ user, colors }) => {
             minWidth: '1000px',
             height: '50%',
             padding: '16px',
-            background: 'rgba(0, 0, 0, 0.90)',
+            background: 'var(--bg)',
             backdropFilter: 'blur(5px)',
             color: 'var(--text)',
             display: 'flex',
@@ -131,10 +131,10 @@ export const Leaderboard = ({ user, colors }) => {
                      {/* Sort controls */}
                      <div className="leaderboard-sort-bar">
                         {[
-                           { key: "level",    label: "Level" },
                            { key: "wpm",      label: "WPM" },
+                           { key: "level",    label: "Level" },
                            { key: "accuracy", label: "Accuracy" },
-                           { key: "tests",    label: "Tests" },
+                           { key: "completed",    label: "Completed" },
                            // { key: "rank",     label: "Rank" },
                         ].map(({ key, label }) => (
                            <div
@@ -152,98 +152,100 @@ export const Leaderboard = ({ user, colors }) => {
                      </div>
                   </div>
                   {/* Table */}
-                  <div className="leaderboard-table-wrapper">
-                     <table className="leaderboard-table">
-                        <thead>
-                           <tr>
-                              <th>#</th>
-                              <th>Player</th>
-                              <th>Rank</th>
-                              <th onClick={() => setSortBy("level")} className="sortable">
-                                 Level
-                              </th>
-                              <th onClick={() => setSortBy("wpm")} className="sortable">
-                                 WPM
-                              </th>
-                              <th onClick={() => setSortBy("accuracy")} className="sortable">
-                                 Accuracy
-                              </th>
-                              <th onClick={() => setSortBy("tests")} className="sortable">
-                                 Completed
-                              </th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           {sorted.map((entry, index) => {
-                              const position = index + 1;
-                              const medal = getMedalColor(position);
-                              const isMe = isCurrentUser(entry);
 
-                              return (
-                                 <tr
-                                    key={index}
-                                    className={`leaderboard-row ${isMe ? "is-current-user" : ""}`}
-                                 >
-                                    {/* Position */}
-                                    <td className="col-position">
-                                       {medal ? (
-                                          <span className="medal" style={{ color: medal }}>
-                                             {position === 1 ? "🥇" : position === 2 ? "🥈" : "🥉"}
-                                          </span>
-                                       ) : (
-                                          <span className="position-num">{position}</span>
-                                       )}
-                                    </td>
+                  { loading 
+                     ? <Loading />
+                     : <div className="leaderboard-table-wrapper">
+                        <table className="leaderboard-table">
+                           <thead>
+                              <tr>
+                                 <th>#</th>
+                                 <th>Player</th>
+                                 <th>Rank</th>
+                                 <th onClick={() => setSortBy("wpm")} className="sortable">
+                                    WPM
+                                 </th>
+                                 <th onClick={() => setSortBy("level")} className="sortable">
+                                    Level
+                                 </th>
+                                 <th onClick={() => setSortBy("accuracy")} className="sortable">
+                                    Accuracy
+                                 </th>
+                                 <th onClick={() => setSortBy("completed")} className="sortable">
+                                    Completed
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {sorted.map((entry, index) => {
+                                 const position = index + 1;
+                                 const medal = getMedalColor(position);
+                                 const isMe = isCurrentUser(entry);
 
-                                    {/* Player */}
-                                    <td className="col-player">
-                                       <div className="player-info">
-                                          {entry.photoURL ? (
-                                             <img src={entry.photoURL} alt="" className="player-avatar" />
+                                 return (
+                                    <tr
+                                       key={index}
+                                       className={`leaderboard-row ${isMe ? "is-current-user" : ""}`}
+                                    >
+                                       {/* Position */}
+                                       <td className="col-position">
+                                          {medal ? (
+                                             <span className="medal" style={{ color: medal }}>
+                                                {position === 1 ? "🥇" : position === 2 ? "🥈" : "🥉"}
+                                             </span>
                                           ) : (
-                                             <div className="player-avatar-placeholder">
-                                                {entry.displayName?.[0]?.toUpperCase() || "?"}
-                                             </div>
+                                             <span className="position-num">{position}</span>
                                           )}
-                                          <span className={`player-name ${isMe && 'you-badge'}`}>
-                                             {entry.displayName}
+                                       </td>
+
+                                       {/* Player */}
+                                       <td className="col-player">
+                                          <div className="player-info">
+                                             {entry.photoURL 
+                                                ? ( <img src={entry.photoURL} alt="" className="player-avatar" />) 
+                                                : ( <div className="player-avatar-placeholder">
+                                                      {entry.displayName?.[0]?.toUpperCase() || "?"}
+                                                   </div>)
+                                             }
+                                             <span className={`player-name ${isMe && 'you-badge'}`}>
+                                                {entry.email?.split('@')[0] || "?"}
+                                             </span>
+                                          </div>
+                                       </td>
+
+                                       {/* Earned Rank Badge */}
+                                       <td className="col-rank-badge">
+                                          <span
+                                             className="rank-badge"
+                                             style={{ color: entry.earnedRank?.color, borderColor: entry.earnedRank?.color }}
+                                          >
+                                             {entry.earnedRank?.label}
                                           </span>
-                                       </div>
-                                    </td>
+                                       </td>
 
-                                    {/* Earned Rank Badge */}
-                                    <td className="col-rank-badge">
-                                       <span
-                                          className="rank-badge"
-                                          style={{ color: entry.earnedRank?.color, borderColor: entry.earnedRank?.color }}
-                                       >
-                                          {entry.earnedRank?.label}
-                                       </span>
-                                    </td>
+                                       {/* WPM */}
+                                       <td className="col-wpm">
+                                          <span className="wpm-value">{entry.wpm}</span>
+                                       </td>
 
-                                    {/* Level */}
-                                    <td className="col-level">
-                                       <span className="level-chip">{entry.level}</span>
-                                    </td>
+                                       {/* Level */}
+                                       <td className="col-level">
+                                          <span className="level-chip">{entry.level}</span>
+                                       </td>
 
-                                    {/* WPM */}
-                                    <td className="col-wpm">
-                                       <span className="wpm-value">{entry.wpm}</span>
-                                    </td>
+                                       {/* Accuracy */}
+                                       <td className="col-accuracy">{entry.accuracy}%</td>
 
-                                    {/* Accuracy */}
-                                    <td className="col-accuracy">{entry.accuracy}%</td>
-
-                                    {/* Tests */}
-                                    <td className="col-tests">{entry.testsCompleted}</td>
-                                 </tr>
-                              );
-                           })}
-                        </tbody>
-                     </table>
-                  </div>
-
-                  {entries.length === 0 && (
+                                       {/* Tests */}
+                                       <td className="col-completed">{entry.testsCompleted}</td>
+                                    </tr>
+                                 );
+                              })}
+                           </tbody>
+                        </table>
+                     </div>
+                  }
+                  {entries.length === 0 && !loading && (
                      <div className="leaderboard-empty">
                         <p>No entries yet. Be the first on the board!</p>
                      </div>

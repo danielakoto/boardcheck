@@ -30,7 +30,6 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
    const wordRefs = useRef([]);
    const containerRef = useRef(null);
    
-
    // Auto-scroll active word into view
    useEffect(() => {
       const activeEl = wordRefs.current[wordIndex];

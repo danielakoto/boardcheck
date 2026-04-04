@@ -99,7 +99,6 @@ export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersis
    useEffect(() => {
       if (!sound?.sound) {
          audioBufferRef.current = null
-         toast("No sound selected.")
          return
       }
 

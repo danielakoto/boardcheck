@@ -1,19 +1,19 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaCloudSun } from "react-icons/fa";
 
-import { Login, User, Board, Typing, ColorSettings, SoundSettings, Store, Leaderboard } from './components/index';
+import { Login, User, Board, Typing, ColorSettings, SoundSettings, Store, Leaderboard, Loading } from './components/index';
 
 import { useColors } from './functions/useColors'
 import { useSounds } from './functions/useSounds'
 
 import { launchConfetti } from './functions/confetti.js'
+import { sendMessage } from './functions/sendMessage.js'
 
 import sounds from "../public/sounds/sounds.json"
 
-import './styles/App.scss'; // We'll define the CSS later
-
+import './styles/App.scss';
 
 export const App = () => {
   const [user, setUser] = useState(null)
@@ -24,20 +24,68 @@ export const App = () => {
   const [loading, setLoading] = useState(false);
 
   const { colors, updateColor, resetColors } = useColors()
-  const { sound, updateSound } = useSounds(user, sounds)
+  const { sound, updateSound } = useSounds(sounds)
 
-  console.log(colors)
-  
-  const sendMessage = (msg) =>
-    new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));
+  let savedTheme = "dark"
+  chrome.storage.sync.get('theme', ({ theme }) => {
+    if (theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      savedTheme = theme
+    }
+  });
 
+  const toggle = (mode) => {
+    document.documentElement.setAttribute('data-theme', mode);
+    chrome.storage.sync.set({ theme: mode });
+    savedTheme = mode
+    console.log("Changed color.")
+  };
+
+
+  // ─── Setup + Token Refresh on Mount ───────────────────────────────────────
   useEffect(() => {
     const setupApp = async () => {
-      let { user } = await chrome.storage.local.get(["user"])
-      setUser(user)
-    }
-    setupApp()
-  }, [])
+      const { user } = await chrome.storage.local.get(["user"]);
+
+      if (user) {
+        // Attempt a silent token refresh before doing anything else
+        const res = await sendMessage({ action: "refreshToken" });
+        if (res?.res === "Success") {
+          // Re-fetch in case the background updated the stored token
+          const { user: refreshedUser } = await chrome.storage.local.get(["user"]);
+          setUser(refreshedUser);
+        } else {
+          // Token is dead — log out gracefully
+          await chrome.storage.local.remove("user");
+          setUser(null);
+          toast("Session expired. Please sign in again.");
+        }
+      } else {
+        setUser(null);
+      }
+    };
+    setupApp();
+  }, []);
+
+  // ─── Periodic Token Refresh (every 30 min) ────────────────────────────────
+  useEffect(() => {
+    if (!user) return;
+
+    const THIRTY_MINUTES = 30 * 60 * 1000;
+    const interval = setInterval(async () => {
+      const res = await sendMessage({ action: "refreshToken" });
+      if (res?.res === "Success") {
+        const { user: refreshedUser } = await chrome.storage.local.get(["user"]);
+        setUser(refreshedUser);
+      } else {
+        await chrome.storage.local.remove("user");
+        setUser(null);
+        toast("Session expired. Please sign in again.");
+      }
+    }, THIRTY_MINUTES);
+
+    return () => clearInterval(interval);
+  }, [user]);
   
   const resetKeyboard = () => {
     setRealTimeKeys({});
@@ -48,10 +96,7 @@ export const App = () => {
     if(!user) {
       chrome.storage.local.set({ user: {
         "stats": {
-          "level": {
-            "level": "-",
-            "next": {}
-          },
+          "level": { "level": "-", "next": {} },
           "wpm": results.wpm,
           "accuracy": results.accuracy,
           "correctWords": results.correctWords,
@@ -60,66 +105,55 @@ export const App = () => {
           "totalWords": results.totalWords,
         },
         "earned": {
-          "rank": {
-            "label": "Noob",
-            "color": "#ff2c2c"
-          }
+          "rank": { "label": "Noob", "color": "#ff2c2c" }
         }
       }})
       setPrevResults({ saved: false, data: results })
       return;
     }
-    // TODO: Send results to backend/leaderboard
+
     toast.promise(
       async () => {
-      try {
-        const prevLevel = user.stats.level.level
-        const prevWPM = user.stats.wpm
-        const res = await sendMessage({ action: "saveScores", results: results });
-        if (res?.res === "Success") {
-          let { user } = await chrome.storage.local.get("user");
-          setUser(user)
-          if(user.stats.level.level > prevLevel)
-            launchConfetti(colors)
-          if(user.stats.wpm > prevWPM)
-            launchConfetti(colors)
+        try {
+          setLoading(true)
+          const prevLevel = user.stats.level.level
+          const prevWPM = user.stats.wpm
+          const res = await sendMessage({ action: "saveScores", results: results });
+          if (res?.res === "Success") {
+            let { user } = await chrome.storage.local.get("user");
+            setUser(user)
+            if(user.stats.level.level > prevLevel) launchConfetti(colors)
+            if(user.stats.wpm > prevWPM) launchConfetti(colors)
+          }
+          else throw new Error(res?.res || "Error signing in with Google.");
+        } finally {
+          setLoading(false);
         }
-        else throw new Error(res?.res || "Error signing in with Google.");
-      } finally {
-        setLoading(false);
-      }
       }, {
         loading: 'Saving Score..',
         success: 'Saved',
         error: (e) => `Error occured: ${e}`,
-      }, {
-        icon: false
-      }
+      }, { icon: false }
     );
   }
 
   const handleLogin = async () => {
     let { user } = await chrome.storage.local.get("user");
     setUser(user)
-    toast(`Signed in as ${user.email}.`)
+    toast(`Signed in as ${user.email?.split('@')[0]}.`)
   }
 
+  // ─── Save Unsaved Results After Login ─────────────────────────────────────
   useEffect(() => {
     const saveUnsavedResult = async () => {
       if(!prevResults.saved) {
         toast.promise(
           async () => {
             try {
-              const prevLevel = user.stats.level.level
-              const prevWPM = user.stats.wpm
               const res = await sendMessage({ action: "saveScores", results: prevResults.data });
               if (res?.res === "Success") {
                 let { user } = await chrome.storage.local.get("user");
                 setUser(user)
-                if(user.stat.level.level > prevLevel)
-                  launchConfetti(colors)
-                if(user.stats.wpm > prevWPM)
-                  launchConfetti(colors)
               }
               else throw new Error(res?.res || "Error signing in with Google.");
             } finally {
@@ -129,9 +163,7 @@ export const App = () => {
             loading: 'Saving Score..',
             success: 'Saved',
             error: (e) => `Error occured: ${e}`,
-          }, {
-            icon: false
-          }
+          }, { icon: false }
         );
       }
     }
@@ -152,14 +184,46 @@ export const App = () => {
         '--clicked-key-bg':       colors.clickedKeyBg,
         '--clicked-key-text':     colors.clickedKeyText,
       }}>
+        { loading && (<Loading />) }
         <div id="keyboard-header-container">
           <div id='keyboard-logo'>
-            {/* <img src="img/logo.png" alt="logo"></img> */}
             <h3 className='header'>BoardCheck</h3>
           </div>
           <div className='options-container'>
             <Typing user={user} colors={colors} onTestComplete={handleTestComplete} typingState={typingState} setTypingState={setTypingState} />
-            <FaSyncAlt onClick={resetKeyboard} style={{ fontSize:"14px", cursor:"pointer" }}/>
+            
+            <div 
+              onClick={resetKeyboard}
+              style={{
+                borderRadius: '5px',
+                padding: '4px',
+                cursor: 'pointer',
+                fontSize: '18px',
+                height: '25px',
+                width: '25px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <FaSyncAlt />
+            </div>
+            <div
+              onClick={() => toggle(savedTheme === "light" ? "dark" : "light" )} 
+              style={{
+                borderRadius: '5px',
+                padding: '4px',
+                cursor: 'pointer',
+                fontSize: '18px',
+                height: '25px',
+                width: '25px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <FaCloudSun />
+            </div>
             <Leaderboard user={user} colors={colors} />
             <Store colors={colors} />
             <SoundSettings colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
@@ -170,6 +234,7 @@ export const App = () => {
         <div id='keyboard-section'>
           <Board realTimeKeys={realTimeKeys} setRealTimeKeys={setRealTimeKeys} persistentKeys={persistentKeys} setPersistentKeys={setPersistentKeys} sound={sound} colors={colors} />
         </div>
+        { loading && (<Loading />) }
     </div>
   );
 };

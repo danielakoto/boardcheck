@@ -1,5 +1,4 @@
-// confetti.js — BoardCheck celebration burst
-
+// BoardCheck celebration burst
 export const launchConfetti = (colors) => {
   const canvas = document.createElement('canvas');
   canvas.style.cssText = `

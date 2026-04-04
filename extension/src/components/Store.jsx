@@ -48,7 +48,7 @@ export const Store = ({ colors }) => {
           width: '100%',
           height: '287px',
           padding: '8px',
-          background: 'rgba(0, 0, 0, 0.75)',
+          background: 'var(--overlay-bg)',
           backdropFilter: 'blur(5px)',
           color: 'var(--text)',
           display: 'flex',

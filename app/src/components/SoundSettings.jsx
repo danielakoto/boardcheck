@@ -39,20 +39,20 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
                padding:'12px',
                position: 'fixed',
                top:'0px',
-               left: open ? '0px' : '-100vw',
+               right: open ? '0px' : '-100vw',
                zIndex: 999,
-               transition: 'left 0.3s ease',
+               transition: 'right 0.3s ease',
                boxSizing: 'border-box',
                display:'flex',
-               alignItems:'end',
-               justifyContent:'start'
+               alignItems:'start',
+               justifyContent:'end'
             }}
          >
             <div onClick={(e) => e.stopPropagation()} style={{
                position: 'fixed',
                width: '400px',
                height: '500px',
-               background: 'rgba(0, 0, 0, 0.75)',
+               background: 'var(--overlay-bg)',
                backdropFilter: 'blur(5px)',
                color: 'var(--text)',
                padding: '16px',

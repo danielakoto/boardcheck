@@ -43,16 +43,47 @@ const commonWords = {
    ],
 };
 
-// Preset modes you can offer users
-const modes = {
-  easy:   { one: 0.10, two: 0.20, three: 0.40, four: 0.25, long: 0.05 },
-  normal: { one: 0.05, two: 0.10, three: 0.35, four: 0.35, long: 0.15 },
-  hard:   { one: 0.00, two: 0.05, three: 0.15, four: 0.35, long: 0.45 },
+// Define your difficulty anchors — add as many as you want
+const difficultyAnchors = [
+  { level: 1,  dist: { one: 0.15, two: 0.30, three: 0.40, four: 0.15, long: 0.00 } },
+  { level: 5,  dist: { one: 0.05, two: 0.10, three: 0.35, four: 0.35, long: 0.15 } },
+  { level: 10, dist: { one: 0.00, two: 0.05, three: 0.15, four: 0.35, long: 0.45 } },
+  { level: 15, dist: { one: 0.00, two: 0.00, three: 0.05, four: 0.20, long: 0.75 } },
+  { level: 20, dist: { one: 0.00, two: 0.00, three: 0.00, four: 0.15, long: 0.85 } }, // max hardness
+];
+
+const MAX_HARD_LEVEL = difficultyAnchors.at(-1).level;
+
+// Smoothly interpolate between two anchors
+const interpolateDist = (a, b, t) => {
+  const keys = Object.keys(a);
+  return Object.fromEntries(keys.map(k => [k, a[k] + (b[k] - a[k]) * t]));
 };
 
-// Now generateWords has full distribution control
-export const generateWords = (count = 50, distribution = modes.easy) => {
-  const pick = (arr, n) => [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+// Get distribution for any level, clamped at max hardness
+const getDistribution = (level) => {
+  const clamped = Math.min(level, MAX_HARD_LEVEL);
+
+  // Exact anchor match
+  const exact = difficultyAnchors.find(a => a.level === clamped);
+  if (exact) return exact.dist;
+
+  // Find surrounding anchors and interpolate
+  const lower = [...difficultyAnchors].reverse().find(a => a.level < clamped);
+  const upper = difficultyAnchors.find(a => a.level > clamped);
+
+  if (!lower) return difficultyAnchors[0].dist;
+  if (!upper) return difficultyAnchors.at(-1).dist;
+
+  const t = (clamped - lower.level) / (upper.level - lower.level);
+  return interpolateDist(lower.dist, upper.dist, t);
+};
+
+export const generateWords = (count = 50, level = 1) => {
+  const distribution = getDistribution(level);
+
+  const pick = (arr, n) =>
+    n <= 0 ? [] : [...arr].sort(() => Math.random() - 0.5).slice(0, n);
 
   const counts = {
     one:   Math.round(count * distribution.one),
@@ -61,6 +92,10 @@ export const generateWords = (count = 50, distribution = modes.easy) => {
     four:  Math.round(count * distribution.four),
     long:  Math.round(count * distribution.long),
   };
+
+  // Fix rounding drift
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  counts.four += count - total;
 
   const words = [
     ...pick(commonWords.one,   counts.one),

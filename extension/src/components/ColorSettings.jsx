@@ -57,7 +57,7 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
           position: 'fixed',
           width: '220px',
           height: 'fit-content',
-          background: 'rgba(0, 0, 0, 0.75)',
+          background: 'var(--overlay-bg)',
           backdropFilter: 'blur(5px)',
           color: 'var(--text)',
           padding: '16px',

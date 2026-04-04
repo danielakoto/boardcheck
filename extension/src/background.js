@@ -19,59 +19,65 @@ const auth = getAuth(app);
 const functions = getFunctions(app, 'us-east4')
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === "signUp") {
-      const { email, password } = message;
-      signUp(email, password, sendResponse);
-      return true; 
-  }
-  if (message.action === "signIn") {
-      const { email, password } = message;
-      signIn(email, password, sendResponse );
-      return true  
-  }
-  if (message.action === "signInWithGoogle") {
-      signInWithGoogle(sendResponse);
-      return true  
-  }
-  if (message.action === "signOut") {
-      signOutUser(sendResponse);
-      return true  
-  }
-  if (message.action === "checkToken") {
-      (async () => {
-          try {
-              const { token } = message;
-              const result = await checkToken(token);
-              sendResponse({ res: result })
-          } catch (error) {
-              sendResponse({ res: error })
-          }
-      })();
-      return true  
-  }
-  if(message.action === "initUserDetails") {
-      updateDetails(sendResponse)
-      return true
-  }
-  if(message.action === "saveScores") {
-    const { results } = message;
+    if (message.action === "signUp") {
+        const { email, password } = message;
+        signUp(email, password, sendResponse);
+        return true; 
+    }
+    if (message.action === "signIn") {
+        const { email, password } = message;
+        signIn(email, password, sendResponse );
+        return true  
+    }
+    if (message.action === "signInWithGoogle") {
+        signInWithGoogle(sendResponse);
+        return true  
+    }
+    if (message.action === "signOut") {
+        signOutUser(sendResponse);
+        return true  
+    }
+    if (message.action === "checkToken") {
+        (async () => {
+            try {
+                const { token } = message;
+                const result = await checkToken(token);
+                sendResponse({ res: result })
+            } catch (error) {
+                sendResponse({ res: error })
+            }
+        })();
+        return true  
+    }
+    if(message.action === "initUserDetails") {
+        updateDetails(sendResponse)
+        return true
+    }
+    if(message.action === "saveScores") {
+        const { results } = message;
 
-      saveScores(results, sendResponse)
-      return true
-  }
-  if(message.action === "saveSettings") {
-      saveSettings(sendResponse)
-      return true
-  }
-  if(message.action === "getLeaderboard") {
-      getLeaderboard(sendResponse)
-      return true
-  }
+        saveScores(results, sendResponse)
+        return true
+    }
+    if(message.action === "saveSettings") {
+        saveSettings(sendResponse)
+        return true
+    }
+    if(message.action === "getLeaderboard") {
+        getLeaderboard(sendResponse)
+        return true
+    }
+
+    if (message.action === "refreshToken") {
+        refreshUserToken()
+            .then((token) => sendResponse({ res: "Success", token }))
+            .catch((err) => sendResponse({ res: err.message }));
+        return true; // Keep channel open for async
+    }
 
 });
 
 const signUp = async (email, password, sendResponse) => {
-  console.log("trying to sign up")
     try {
         const userCredential = await createUserWithEmailAndPassword(
             auth,
@@ -137,8 +143,6 @@ const signInWithGoogle = async (sendResponse) => {
         // 1. Get access token via Chrome identity
         const accessToken = await getGoogleToken();
 
-        console.log(accessToken)
-
         // 2. Fetch user info AND id token using access token
         const idTokenRes = await fetch(
             `https://oauth2.googleapis.com/tokeninfo?access_token=${accessToken}`
@@ -156,8 +160,6 @@ const signInWithGoogle = async (sendResponse) => {
 
         // 5. Get Firebase ID token
         const token = await user.getIdToken(true);
-
-        console.log(token)
 
         // 6. Only call create-user if new, otherwise just fetch their profile
         if (isNewUser) {
@@ -206,7 +208,6 @@ const signOutUser = async (sendResponse) => {
 
 
 const saveScores = async (results, sendResponse) => {
-  console.log(results)
   try {
     const { token } = await chrome.storage.local.get("token");
     const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-scores", {
@@ -243,13 +244,11 @@ const saveScores = async (results, sendResponse) => {
 }
 
 const saveSettings = async (sendResponse) => {
-    console.log("Running function")
     try {
         const { colors } = await chrome.storage.local.get("colors")
         const { sound } = await chrome.storage.local.get("sound")
         const { token } = await chrome.storage.local.get("token")
         
-        console.log("Running saveSettings")
         const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-settings", {
             method: "POST",
             headers: {
@@ -257,11 +256,10 @@ const saveSettings = async (sendResponse) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                colors: JSON.parse(colors),
+                colors: colors,
                 sound: JSON.parse(sound)
             })
         });
-        console.log(res)
         
         const data = await res.json()
 
@@ -315,7 +313,8 @@ const initUserDetails = async () => {
     
     const user = await getUserData()
 
-    chrome.storage.local.set({ user: user })
+    if(user.email) chrome.storage.local.set({ user: user })
+    else chrome.storage.local.set({ user: null })
 }
 
 const getUserData = async () => {
@@ -350,4 +349,28 @@ const getGoogleToken = () => {
             resolve(token);
         });
     });
+}
+
+const refreshUserToken = async () => {
+  return new Promise((resolve, reject) => {
+    chrome.identity.getAuthToken({ interactive: false }, async (token) => {
+      if (chrome.runtime.lastError || !token) {
+        // Token is fully expired, user must re-authenticate
+        chrome.storage.local.remove("user");
+        reject(new Error("Session expired. Please sign in again."));
+        return;
+      }
+
+      // Optionally hit your backend to exchange/validate token
+      // then update storage
+      const { user } = await chrome.storage.local.get("user");
+      if (user) {
+        user.token = token;
+        await chrome.storage.local.set({ user });
+        initUserDetails()
+      }
+
+      resolve(token);
+    });
+  });
 }

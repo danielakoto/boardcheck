@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 import { saveSettings } from '../background'
 
@@ -12,26 +12,21 @@ const DEFAULTS = {
   clickedKeyText:   '#454545',
 }
 
-const STORAGE_KEY = 'colors'
-
 export const useColors = () => {
+   const saveDebounceRef = useRef(null)
+   
    const [colors, setColors] = useState(() => {
       try {
-         let saved = localStorage.getItem(STORAGE_KEY)
-         let user = localStorage.getItem("user")
-         console.log(saved)
-         console.log(user)
-         console.log(JSON.parse(user))
-         user = JSON.parse(user)
-         if(user.settings.activeTheme) {
+         let saved = JSON.parse(localStorage.getItem("colors"))
+         let user = JSON.parse(localStorage.getItem("user"))
+         
+         if(user?.settings?.activeTheme) {
             saved = user.settings.activeTheme
-            console.log("has preset colors")
-            console.log(saved)
             return saved ? { ...DEFAULTS, ...saved } : DEFAULTS
          }
-         return saved ? { ...DEFAULTS, ...JSON.parse(saved) } : DEFAULTS
-      } catch (error) {
-         console.log("Returning defaults: " + error)
+
+         return saved ? { ...DEFAULTS, ...saved } : DEFAULTS
+      } catch {
          return DEFAULTS
       }
    })
@@ -39,15 +34,21 @@ export const useColors = () => {
    const updateColor = (key, value) => {
       setColors(prev => {
          const next = { ...prev, [key]: value }
-         localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+         localStorage.setItem("colors", JSON.stringify(next))
          return next
       })
-      saveSettings()
-   }
 
+      // Clear any pending save, then schedule a new one
+      if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current)
+      saveDebounceRef.current = setTimeout(() => {
+         saveSettings()
+      }, 1000) // waits 1s after the last change
+   }
+   
    const resetColors = () => {
-      localStorage.removeItem(STORAGE_KEY)
+      localStorage.setItem("colors", JSON.stringify(DEFAULTS))
       setColors(DEFAULTS)
+      saveSettings()
    }
 
    return { colors, updateColor, resetColors }

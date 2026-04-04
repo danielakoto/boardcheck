@@ -7,7 +7,7 @@ function Root() {
   return (
     <>
       <Toaster
-        position="bottom-center"
+        position="top-center"
         toastOptions={{
         className: '',
         duration: 3000,

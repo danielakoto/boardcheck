@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+
+import { sendMessage } from './sendMessage.js'
 
 const DEFAULTS = {
   boardBg:          '#262626',
@@ -12,9 +14,7 @@ const DEFAULTS = {
 }
 
 export const useColors = () => {
-   const sendMessage = (msg) =>
-      new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));
-
+   const saveDebounceRef = useRef(null)
    const [colors, setColors] = useState(DEFAULTS)
 
    // Load colors from storage on mount
@@ -26,12 +26,10 @@ export const useColors = () => {
 
             if (user?.settings?.activeTheme) {
                saved = user.settings.activeTheme
-               console.log("has preset colors")
             }
 
             setColors(saved ? { ...DEFAULTS, ...saved } : DEFAULTS)
-         } catch (error) {
-            console.log("Returning defaults: " + error)
+         } catch {
             setColors(DEFAULTS)
          }
       }
@@ -39,20 +37,23 @@ export const useColors = () => {
       loadColors()
    }, [])
 
-   const updateColor = async (key, value) => {
+   const updateColor = (key, value) => {
       setColors(prev => {
          const next = { ...prev, [key]: value }
          chrome.storage.local.set({ colors: next })  // store as object, not stringified
          return next
       })
-      console.log("changed")
-      await sendMessage({ action: "saveSettings" })
+
+      // Clear any pending save, then schedule a new one
+      if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current)
+      saveDebounceRef.current = setTimeout( async () => {
+         await sendMessage({ action: "saveSettings" })
+      }, 1000) // waits 1s after the last change
    }
 
    const resetColors = async () => {
-      chrome.storage.local.remove("colors")
+      chrome.storage.local.set({ colors: DEFAULTS })
       setColors(DEFAULTS)
-      console.log("changed")
       await sendMessage({ action: "saveSettings" })
    }
 

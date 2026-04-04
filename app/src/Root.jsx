@@ -6,10 +6,11 @@ import './index.css'
 import './styles/Root.scss'
 
 function Root() {
+  
   return (
     <>
       <Toaster
-        position="bottom-left"
+        position="top-center"
         toastOptions={{
         className: '',
         duration: 4000,

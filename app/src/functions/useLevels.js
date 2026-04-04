@@ -9,7 +9,7 @@ export const getTestsForLevel = (level) =>
    Math.floor(BASE_TESTS * Math.pow(SCALING_FACTOR, level - 1));
 
 export const getLevel = (totalWords, testsCompleted) => {
-   let level = 0;
+   let level = 1;
 
    while (
       totalWords >= getWordsForLevel(level) &&

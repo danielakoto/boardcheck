@@ -19,7 +19,6 @@ export const auth = getAuth(app);
 const functions = getFunctions(app, 'us-east4')
 
 export const signUp = async (email, password) => {
-  console.log("trying to sign up")
     try {
         const userCredential = await createUserWithEmailAndPassword(
             auth,
@@ -85,8 +84,6 @@ export const signInWithGoogle = async () => {
         // 1. Get access token via Chrome identity
         const accessToken = await getGoogleToken();
 
-        console.log(accessToken)
-
         // 2. Fetch user info AND id token using access token
         const idTokenRes = await fetch(
             `https://oauth2.googleapis.com/tokeninfo?access_token=${accessToken}`
@@ -105,8 +102,6 @@ export const signInWithGoogle = async () => {
         // 5. Get Firebase ID token
         const token = await user.getIdToken(true);
 
-        console.log(token)
-
         // 6. Only call create-user if new, otherwise just fetch their profile
         if (isNewUser) {
             await fetch("https://api-h4rwr3b4ca-uk.a.run.app/create-user", {
@@ -120,7 +115,6 @@ export const signInWithGoogle = async () => {
 
         // 7. Store token and defaults
         localStorage.setItem("token", token);
-        console.log(token)
 
         await initUserDetails();
 
@@ -142,7 +136,7 @@ export const signOutUser = async () => {
 
             // Revoke via GIS (clears the client-side session)
             google.accounts.oauth2.revoke(token, () => {
-                console.log('Token revoked');
+                console.error('Token revoked');
             });
         }
 
@@ -158,7 +152,6 @@ export const signOutUser = async () => {
 };
 
 export const saveScores = async (results) => {
-  console.log(results)
   try {
     const token = localStorage.getItem("token");
     const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-scores", {
@@ -197,9 +190,11 @@ export const saveScores = async (results) => {
 export const saveSettings = async () => {
   try {
 
-    const colors = localStorage.getItem('colors')
-    const sound = localStorage.getItem('sound')
+    const colors = localStorage.getItem("colors")
+    const sound = localStorage.getItem("sound")
     const token = localStorage.getItem("token");
+
+    if(!token) return({ res: "Success",  data: "No user."});
 
     const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-settings", {
       method: "POST",
@@ -253,15 +248,16 @@ const payment = async () => {
     }
 }
 
-const initUserDetails = async () => {
+export const initUserDetails = async () => {
     const authUser = auth.currentUser;
     if(!authUser) {
         return 
     }
     
     const user = await getUserData()
-
-    localStorage.setItem("user", JSON.stringify(user))
+    
+    if(user.email) localStorage.setItem("user", JSON.stringify(user))
+    else localStorage.setItem("user", JSON.stringify(null))
 }
 
 async function getUserData() {
@@ -283,21 +279,21 @@ async function getUserData() {
 const getGoogleToken = () => {
     return new Promise((resolve, reject) => {
         const client = google.accounts.oauth2.initTokenClient({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        scope: "openid email profile",  // your required scopes
-        callback: (response) => {
-            if (response.error) {
-            console.error('getAuthToken error:', response.error);
-            reject(new Error(response.error));
-            return;
-            }
-            if (!response.access_token) {
-            console.error('getAuthToken: no token returned');
-            reject(new Error('No token returned'));
-            return;
-            }
-            resolve(response.access_token);
-        },
+            client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+            scope: "openid email profile",  // your required scopes
+            callback: (response) => {
+                if (response.error) {
+                console.error('getAuthToken error:', response.error);
+                reject(new Error(response.error));
+                return;
+                }
+                if (!response.access_token) {
+                console.error('getAuthToken: no token returned');
+                reject(new Error('No token returned'));
+                return;
+                }
+                resolve(response.access_token);
+            },
         });
 
         client.requestAccessToken({ prompt: 'consent' });
