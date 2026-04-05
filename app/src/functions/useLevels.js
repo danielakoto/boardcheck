@@ -78,5 +78,5 @@ export const getRank = (wpm) => {
   if (wpm >= 21)  return { label: 'Pecking',       color: '#f0b870' }; // 21-26  — one finger territory
   if (wpm >= 15)  return { label: 'Struggling',    color: '#f09060' }; // 15-20  — labored, painful to watch
   if (wpm >= 8)   return { label: 'Crawling',      color: '#f06060' }; // 8-14   — key by key
-  return          { label: 'Frozen',               color: '#ff2c2c' }; // 0-7    — barely moving
+  return          { label: 'Noob',                 color: '#ff2c2c' }; // 0-7    — barely moving
 };
