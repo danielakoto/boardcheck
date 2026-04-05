@@ -121,13 +121,88 @@ export const User = ({ colors, user, setUser }) => {
                               </div>
                            );
                      })()}
-                     <div className="user-wpm">
-                        <div>{user.stats.wpm}</div>
-                     </div>
+                     {user?.stats && (() => {
+                        const lvl = user.stats.level;
+                        const xpInto  = lvl.xpIntoLevel  ?? 0;
+                        const xpNeeded = lvl.xpNeeded    ?? 1;
+                        const progress = lvl.progress    ?? 0;
+
+                        return (
+                           <div style={{ width: '100%' }}>
+
+                              {/* Level + next label */}
+                              <div style={{
+                              display: 'flex',
+                              alignItems: 'baseline',
+                              justifyContent: 'space-between',
+                              marginBottom: '6px',
+                              }}>
+                              <span style={{ fontSize: '13px', fontWeight: 500 }}>
+                                 Level {lvl.level}
+                              </span>
+                              <span style={{ fontSize: '11px', opacity: 0.4, letterSpacing: '0.5px' }}>
+                                 {lvl.xpToNextLevel?.toLocaleString()} xp to level {lvl.level + 1}
+                              </span>
+                              </div>
+
+                              {/* Progress bar */}
+                              <div style={{
+                              width: '100%',
+                              height: '4px',
+                              background: 'rgba(255,255,255,0.1)',
+                              borderRadius: '99px',
+                              overflow: 'hidden',
+                              marginBottom: '5px',
+                              }}>
+                              <div style={{
+                                 height: '100%',
+                                 width: `${progress}%`,
+                                 background: 'rgba(255,255,255,0.85)',
+                                 borderRadius: '99px',
+                                 transition: 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                              }} />
+                              </div>
+
+                              {/* XP label + fraction */}
+                              <div style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              }}>
+                              <span style={{ fontSize: '10px', letterSpacing: '2.5px', textTransform: 'uppercase', opacity: 0.35 }}>
+                                 XP
+                              </span>
+                              <span style={{ fontSize: '10px', opacity: 0.4 }}>
+                                 {xpInto.toLocaleString()}
+                                 <span style={{ opacity: 0.6 }}> / {xpNeeded.toLocaleString()}</span>
+                              </span>
+                              </div>
+                           </div>
+                        );
+                     })()}
                   </div>
+                  {(() => {
+                     const grade = getRank(user.stats.wpm);
+                        return (
+                        <div className="user-stat-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                           <div className="user-stat-label">Rank</div>
+                           <div style={{
+                              fontSize: '12px',
+                              letterSpacing: '3px',
+                              textTransform: 'uppercase',
+                              fontWeight: 700,
+                              color: grade.color,
+                              border: `2px solid ${grade.color}`,
+                              borderRadius: '4px',
+                              padding: '3px 10px',
+                              width:'fit-content'
+                           }}>
+                              {grade.label}
+                           </div>
+                        </div>
+                        );
+                  })()}
                   {[
-                     { label: 'Level', value: user.stats.level.level },
-                     { label: 'Rank', value: user.earned.rank.label },
                      { label: 'Accuracy', value: `${user.stats.accuracy}%` },
                      { label: 'Last WPM',  value: user.stats.lastWpm },
                      { label: 'Completed', value: user.stats.testsCompleted },
