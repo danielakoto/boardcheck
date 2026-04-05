@@ -158,7 +158,7 @@ export const Leaderboard = ({ user, colors }) => {
                            <thead>
                               <tr>
                                  <th>#</th>
-                                 <th>Player</th>
+                                 <th style={{ textAlign:'start', padding: '0 0 0 20px' }}>Player</th>
                                  <th>Rank</th>
                                  <th onClick={() => setSortBy("wpm")} className="sortable">
                                     WPM

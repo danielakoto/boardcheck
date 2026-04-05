@@ -61,7 +61,7 @@ body {
 
 .icon-button {
   margin: 0;
-  font-size: 14px;
+  font-size: 18px;
   cursor: pointer;
   padding: 4px;
   border-radius: 5px;
@@ -72,6 +72,5 @@ body {
 }
 
 .icon-button:hover {
-  background-color: var(--key-bg);
-  color: var(--key-text);
+  opacity: 0.6;
 }

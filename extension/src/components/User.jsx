@@ -50,7 +50,7 @@ export const User = ({ colors, user, setUser }) => {
                justifyContent: 'center'
             }}
          >
-            <FaUser />
+            <FaUser className='icon-button' />
          </div>
          
          <div

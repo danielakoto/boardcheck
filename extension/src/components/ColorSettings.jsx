@@ -37,7 +37,7 @@ export const ColorSettings = ({ colors, updateColor, resetColors }) => {
             justifyContent: 'center'
          }}
       >
-        <FaPalette />
+        <FaPalette className='icon-button' />
       </div>
       <div onClick={() => setOpen(o => !o)} style={{ 
         width:'100vw', 

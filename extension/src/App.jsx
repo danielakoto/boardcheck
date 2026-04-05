@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaSyncAlt, FaCloudSun } from "react-icons/fa";
 
-import { Login, User, Board, Typing, ColorSettings, SoundSettings, Store, Leaderboard, Loading } from './components/index';
+import { Login, User, Board, Typing, ColorSettings, SoundSettings, Leaderboard, Loading } from './components/index';
 
 import { useColors } from './functions/useColors'
 import { useSounds } from './functions/useSounds'
@@ -140,7 +140,7 @@ export const App = () => {
   const handleLogin = async () => {
     let { user } = await chrome.storage.local.get("user");
     setUser(user)
-    toast(`Signed in as ${user.email?.split('@')[0]}.`)
+    toast(`Signed in as ${user.email?.split('@')[0]}`)
   }
 
   // ─── Save Unsaved Results After Login ─────────────────────────────────────
@@ -225,7 +225,6 @@ export const App = () => {
               <FaCloudSun />
             </div>
             <Leaderboard user={user} colors={colors} />
-            <Store colors={colors} />
             <SoundSettings colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
             <ColorSettings colors={colors} updateColor={updateColor} resetColors={resetColors} />
             {user?.email ? <User colors={colors} user={user} setUser={setUser} /> : <Login colors={colors} onAuthSuccess={handleLogin} />}

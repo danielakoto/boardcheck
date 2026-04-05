@@ -42,9 +42,9 @@
    .user-wpm {
       font-size: 56px;
       font-weight: 800;
-      color: var(--key-text);
+      color: var(--key-bg);
       letter-spacing: -2px;
-      -webkit-text-stroke: 2px var(--key-bg);
+      -webkit-text-stroke: 2px var(--key-text);
       display: flex;
       align-items: center;
       justify-content: center;

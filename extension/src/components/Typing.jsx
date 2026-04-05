@@ -279,7 +279,7 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
                </div>
 
                {!user?.email && (
-                  <div>Please sign in or register to save score.</div>
+                  <div style={{ margin: 0, fontSize: '13px', letterSpacing: '2px', opacity: 0.6 }}>Please sign in or register to save score.</div>
                )}
 
                <div style={{ 
@@ -377,7 +377,7 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
                      onMouseEnter={e => e.target.style.opacity = '0.8'}
                      onMouseLeave={e => e.target.style.opacity = '1'}
                   >
-                     Try Again
+                     Start
                   </div>
                </div>
             </div>

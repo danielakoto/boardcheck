@@ -29,7 +29,7 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
                justifyContent: 'center'
             }}
          >
-            <FaVolumeDown />
+            <FaVolumeDown className='icon-button' />
          </div>
 
          <div onClick={() => setOpen(o => !o)} 

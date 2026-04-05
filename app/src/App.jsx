@@ -6,7 +6,7 @@ import { FaSyncAlt, FaLowVision, FaCloudSun } from "react-icons/fa";
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import { Login, User, Board, Typing, ColorSettings, SoundSettings, Store, Leaderboard, Loading } from './components/index';
+import { Login, User, Board, Typing, ColorSettings, SoundSettings, Leaderboard, Loading } from './components/index';
 
 import { useColors } from './functions/useColors'
 import { useSounds } from './functions/useSounds'
@@ -170,9 +170,8 @@ export const App = () => {
         </div>
         <div className='options-container'>
           {menu && (<>
-            <FaSyncAlt onClick={resetKeyboard} style={{ fontSize: "14px", cursor: "pointer" }} />
+            <FaSyncAlt className='icon-button' onClick={resetKeyboard} style={{ fontSize: "18px", cursor: "pointer" }} />
             <Leaderboard user={user} colors={colors} />
-            <Store colors={colors} />
             <SoundSettings colors={colors} sound={sound} updateSound={updateSound} sounds={sounds} />
             <ColorSettings colors={colors} updateColor={updateColor} resetColors={resetColors} />
             {user?.email

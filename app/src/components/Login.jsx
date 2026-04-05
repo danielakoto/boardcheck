@@ -107,7 +107,7 @@ export const Login = ({ colors, onAuthSuccess }) => {
             justifyContent: 'center'
          }}
       >
-         <FaUser />
+         <FaUser className='icon-button' />
       </div>
       <div
          style={{

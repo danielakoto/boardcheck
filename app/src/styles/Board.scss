@@ -202,3 +202,109 @@
   }
 }
 
+@media only screen and (max-width: 700px) {
+  .key {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    padding: 2px;
+    margin: 1px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--key-bg);
+    border-radius: 2px;
+    border: 1px solid var(--black);
+    font-size: 8px;
+    font-weight: 600;
+    cursor: default;
+    box-shadow: 0 2px var(--key-shadow);
+    color: var(--key-text);
+    transition: background-color 0.2s, color 0.2s, top 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+
+  .key.active {
+    top: 2px;
+    background-color: var(--active-highlight);
+    box-shadow: 0 0px var(--active-highlight);
+  }
+
+  .key.persistent {
+    background-color: var(--clicked-key-bg);
+    color: var(--clicked-key-text);
+  }
+
+  // All special keys scaled at ~0.35x from original
+  .key-Esc {
+    width: 23px;
+  }
+
+  .key-Space {
+    width: 119px;
+  }
+
+  .key-Enter {
+    width: 54px;
+  }
+
+  .key-Tab {
+    width: 41px;
+  }
+
+  .key-CapsLock {
+    width: 47px;
+  }
+
+  .key-Backspace {
+    width: 51px;
+  }
+
+  .key-Shift {
+    width: 51px;
+  }
+
+  .key-Ctrl,
+  .key-Win,
+  .key-Alt,
+  .key-Fn {
+    width: 23px;
+  }
+
+  .key-← {
+    margin: 1px 1px 1px 10px;
+  }
+
+  .key-←.active {
+    margin: 2px 1px 0 10px !important;
+  }
+
+  .key-F1,
+  .key-F5,
+  .key-F9,
+  .key-Insert {
+    margin-left: 4px;
+  }
+
+  .key-Slash {
+    width: 42px;
+  }
+
+  .key-Quote {
+    width: 32px;
+  }
+
+  .key-Insert {
+    width: 23px;
+  }
+
+  .key-Home {
+    width: 23px;
+  }
+
+  .key-Circle {
+    border-radius: 50%;
+    margin-left: 3px;
+  }
+}
