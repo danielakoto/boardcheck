@@ -39,7 +39,6 @@ export const signUp = async (email, password) => {
         });
         
         localStorage.setItem("token", token);
-        localStorage.setItem("scan", true)
 
         initUserDetails()
         
@@ -142,8 +141,8 @@ export const signOutUser = async () => {
 
         await signOut(auth);
 
-        localStorage.setItem("token", null);
-        localStorage.setItem("user", null);
+        localStorage.removeItem("token", null);
+        localStorage.removeItem("user", null);
 
         return { res: "Success" };
     } catch (error) {
@@ -195,6 +194,11 @@ export const saveSettings = async () => {
     const token = localStorage.getItem("token");
 
     if(!token) return({ res: "Success",  data: "No user."});
+    
+    if (isTokenExpired(token)) {
+      localStorage.removeItem("token"); // Clear the stale token
+      return { res: "Error", data: "Session expired. Please log in again." };
+    }
 
     const res = await fetch("https://api-h4rwr3b4ca-uk.a.run.app/save-settings", {
       method: "POST",
@@ -255,9 +259,7 @@ export const initUserDetails = async () => {
     }
     
     const user = await getUserData()
-    
     if(user.email) localStorage.setItem("user", JSON.stringify(user))
-    else localStorage.setItem("user", JSON.stringify(null))
 }
 
 async function getUserData() {
@@ -300,3 +302,11 @@ const getGoogleToken = () => {
     });
 };
 
+const isTokenExpired = (token) => {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true; // Treat malformed tokens as expired
+  }
+};

@@ -98,7 +98,6 @@ const signUp = async (email, password, sendResponse) => {
         });
         
         chrome.storage.local.set({ token: token })
-        chrome.storage.local.set({ scan: true })
 
         initUserDetails()
         
@@ -196,7 +195,6 @@ const signOutUser = async (sendResponse) => {
         });
         signOut(auth).then(() => {
             chrome.storage.local.set({ token: null })
-            chrome.storage.local.set({ user: null })
 
             return "Success"
         })
@@ -302,7 +300,6 @@ const payment = async (sendResponse) => {
 }
 
 
-
 // HELPER FUNCTIONS 
 
 const initUserDetails = async () => {
@@ -314,7 +311,6 @@ const initUserDetails = async () => {
     const user = await getUserData()
 
     if(user.email) chrome.storage.local.set({ user: user })
-    else chrome.storage.local.set({ user: null })
 }
 
 const getUserData = async () => {

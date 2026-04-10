@@ -103,24 +103,6 @@ export const User = ({ colors, user, setUser }) => {
                            : <FaUser id="user-photo" />
                         }
                      </div>
-                     {(() => {
-                        const grade = getRank(user.stats.wpm);
-                           return (
-                              <div style={{
-                                 fontSize: '25px',
-                                 letterSpacing: '3px',
-                                 textTransform: 'uppercase',
-                                 fontWeight: 700,
-                                 color: grade.color,
-                                 border: `2px solid ${grade.color}`,
-                                 borderRadius: '4px',
-                                 padding: '3px 10px',
-                                 width:'fit-content'
-                              }}>
-                                 {grade.label}
-                              </div>
-                           );
-                     })()}
                      {user?.stats && (() => {
                         const lvl = user.stats.level;
                         const xpInto  = lvl.xpIntoLevel  ?? 0;

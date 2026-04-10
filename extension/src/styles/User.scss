@@ -5,11 +5,12 @@
    align-items: center;
    justify-content: space-between;
    flex-grow: 1;
-
+   
    #user-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       width: 100%;
   
       #user-photo {

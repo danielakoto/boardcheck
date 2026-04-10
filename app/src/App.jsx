@@ -2,121 +2,131 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FaSyncAlt, FaLowVision, FaCloudSun } from "react-icons/fa";
-// Firebase
-import { auth } from './firebase';
+
+import { auth, analytics } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { logEvent } from 'firebase/analytics';
 
 import { Login, User, Board, Typing, ColorSettings, SoundSettings, Leaderboard, Loading } from './components/index';
-
-import { useColors } from './functions/useColors'
-import { useSounds } from './functions/useSounds'
-import { launchConfetti } from './functions/confetti.js'
-
-import { initUserDetails, saveScores } from './background'
-
-import sounds from "./data/sounds.json"
-
-
+import { useColors } from './functions/useColors';
+import { useSounds } from './functions/useSounds';
+import { launchConfetti } from './functions/confetti.js';
+import { initUserDetails, saveScores } from './background';
+import sounds from "./data/sounds.json";
 import './styles/App.scss';
 
 export const App = () => {
-  const [user, setUser] = useState(null)
-  const [menu, setMenu] = useState(true)
+  const [user, setUser] = useState(null);
+  const [menu, setMenu] = useState(true);
   const [realTimeKeys, setRealTimeKeys] = useState({});
   const [persistentKeys, setPersistentKeys] = useState({});
-  const [typingState, setTypingState] = useState("idle")
-  const [prevResults, setPrevResults] = useState(null)
+  const [typingState, setTypingState] = useState("idle");
+  const [prevResults, setPrevResults] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { colors, updateColor, resetColors } = useColors()
-  const { sound, updateSound } = useSounds(sounds)
+  const { colors, updateColor, resetColors } = useColors();
+  const { sound, updateSound } = useSounds(sounds);
 
-  // On page load — restore saved preference
   let savedTheme = localStorage.getItem('theme');
   if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+  // ─── Log app open once on mount ───────────────────────────────────────────
+  useEffect(() => {
+    logEvent(analytics, 'app_open');
+  }, []);
 
   const toggle = (mode) => {
     document.documentElement.setAttribute('data-theme', mode);
     localStorage.setItem('theme', mode);
-    savedTheme = mode
+    savedTheme = mode;
+    logEvent(analytics, 'theme_toggle', { theme: mode });
   };
-  
 
-  // ─── Auth Listener (replaces setupApp useEffect) ──────────────────────────
-  // Firebase silently refreshes the token every hour via onAuthStateChanged.
-  // No manual refresh logic needed — this fires on login, logout, and renewal.
+  // ─── Auth Listener ────────────────────────────────────────────────────────
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        // Pull the latest user data from localStorage (your existing pattern)
         const storedUser = JSON.parse(localStorage.getItem("user"));
-        if(storedUser) initUserDetails();
-        // Merge firebase identity with your stored stats/rank data
+        if (storedUser.email) initUserDetails();
         setUser(storedUser ? { ...storedUser, email: firebaseUser.email } : null);
-      } else {
-        // Logged out or token truly dead — clear state
-        setUser(null);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
   const resetKeyboard = () => {
     setRealTimeKeys({});
     setPersistentKeys({});
+    logEvent(analytics, 'keyboard_reset');
   };
 
   const handleTestComplete = async (results) => {
+    // Always log the test completion with key metrics
+    logEvent(analytics, 'test_complete', {
+      wpm:           results.wpm,
+      accuracy:      results.accuracy,
+      total_words:   results.totalWords,
+      correct_words: results.correctWords,
+      time_elapsed:  results.timeElapsed,
+      user_logged_in: !!user,
+    });
+
     if (!user) {
       localStorage.setItem("user", JSON.stringify({
-        "stats": {
-          "level": { "level": "-", "next": {} },
-          "wpm": results.wpm,
-          "accuracy": results.accuracy,
-          "correctWords": results.correctWords,
-          "incorrectWords": results.incorrectWords,
-          "timeElapsed": results.timeElapsed,
-          "totalWords": results.totalWords,
+        stats: {
+          level:         { level: "-", next: {} },
+          wpm:           results.wpm,
+          accuracy:      results.accuracy,
+          correctWords:  results.correctWords,
+          incorrectWords: results.incorrectWords,
+          timeElapsed:   results.timeElapsed,
+          totalWords:    results.totalWords,
         },
-        "earned": {
-          "rank": { "label": "Noob", "color": "#ff2c2c" }
+        earned: {
+          rank: { label: "Noob", color: "#ff2c2c" }
         }
-      }))
-      setPrevResults({ saved: false, data: results })
+      }));
+      setPrevResults({ saved: false, data: results });
       return;
     }
 
     toast.promise(
       async () => {
         try {
-          setLoading(true)
-          const prevLevel = user.stats.level.level
-          const prevWPM = user.stats.wpm
+          setLoading(true);
+          const prevLevel = user.stats.level.level || 0;
+          const prevWPM   = user.stats.wpm || 0;
           const res = await saveScores(results);
+
           if (res?.res === "Success") {
             const updatedUser = JSON.parse(localStorage.getItem("user"));
-            setUser(updatedUser)
-            if (updatedUser.stats.level.level > prevLevel) launchConfetti(colors)
-            if (updatedUser.stats.wpm > prevWPM) launchConfetti(colors)
+            setUser(updatedUser);
+            logEvent(analytics, 'score_saved', { wpm: results.wpm, accuracy: results.accuracy });
+
+            if (updatedUser.stats.level.level > prevLevel) launchConfetti(colors);
+            if (updatedUser.stats.wpm > prevWPM) launchConfetti(colors);
+          } else {
+            throw new Error(res?.res || "Error saving scores.");
           }
-          else throw new Error(res?.res || "Error saving scores.");
         } finally {
           setLoading(false);
         }
-      }, {
+      },
+      {
         loading: 'Saving Score..',
         success: 'Saved',
         error: (e) => `Error occurred: ${e}`,
-      }, { icon: false }
+      },
+      { icon: false }
     );
-  }
+  };
 
   const handleLogin = async () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    setUser(storedUser)
-    toast(`Signed in as ${storedUser?.email?.split('@')[0]}.`)
-  }
+    setUser(storedUser);
+    logEvent(analytics, 'login_success');
+    toast(`Signed in as ${storedUser?.email?.split('@')[0]}`);
+  };
 
   // ─── Save Unsaved Results After Login ─────────────────────────────────────
   useEffect(() => {
@@ -125,30 +135,43 @@ export const App = () => {
         toast.promise(
           async () => {
             try {
-              setLoading(true)
+              setLoading(true);
               const res = await saveScores(prevResults.data);
               if (res?.res === "Success") {
                 const updatedUser = JSON.parse(localStorage.getItem("user"));
-                setUser(updatedUser)
+                setUser(updatedUser);
+                logEvent(analytics, 'score_saved', {
+                  wpm:      prevResults.data.wpm,
+                  accuracy: prevResults.data.accuracy,
+                  deferred: true,  // score was saved after login
+                });
+              } else {
+                throw new Error(res?.res || "Error saving scores.");
               }
-              else throw new Error(res?.res || "Error saving scores.");
             } finally {
               setLoading(false);
             }
-          }, {
+          },
+          {
             loading: 'Saving Score..',
             success: 'Saved',
             error: (e) => `Error occurred: ${e}`,
-          }, { icon: false }
+          },
+          { icon: false }
         );
-        setPrevResults(null)
+        setPrevResults(null);
       }
-    }
+    };
 
-    if (prevResults && user) {
-      saveUnsavedResult()
-    }
-  }, [user])
+    if (prevResults && user) saveUnsavedResult();
+  }, [user]);
+
+  const handleMenuToggle = () => {
+    setMenu(o => {
+      logEvent(analytics, 'menu_toggle', { visible: !o });
+      return !o;
+    });
+  };
 
   return (
     <div id="keyboard-tester"
@@ -161,12 +184,10 @@ export const App = () => {
         '--clicked-key-bg':   colors.clickedKeyBg,
         '--clicked-key-text': colors.clickedKeyText,
       }}>
-        { loading && (<Loading />) }
+      {loading && <Loading />}
       <div id="keyboard-header-container">
         <div id='keyboard-logo'>
-          {menu && (
-            <h3 className='header'>BoardCheck</h3>
-          )}
+          {menu && <h3 className='header'>BoardCheck</h3>}
         </div>
         <div className='options-container'>
           {menu && (<>
@@ -189,8 +210,16 @@ export const App = () => {
       </div>
       <div style={{ position: 'absolute', top: '8px', right: '8px', display: 'flex', gap: '8px' }}>
         <Typing user={user} colors={colors} onTestComplete={handleTestComplete} typingState={typingState} setTypingState={setTypingState} />
-        <FaLowVision className='icon-button' onClick={() => setMenu(o => !o)} style={{ fontSize: "14px", cursor: "pointer", opacity: '0.5', aspectRatio: '1/1' }} />
-        <FaCloudSun className='icon-button' onClick={() => toggle(savedTheme === "light" ? "dark" : "light" )} style={{ fontSize: "14px", cursor: "pointer", opacity: '0.5', aspectRatio: '1/1' }} />
+        <FaLowVision
+          className='icon-button'
+          onClick={handleMenuToggle}
+          style={{ fontSize: "14px", cursor: "pointer", opacity: '0.5', aspectRatio: '1/1' }}
+        />
+        <FaCloudSun
+          className='icon-button'
+          onClick={() => toggle(savedTheme === "light" ? "dark" : "light")}
+          style={{ fontSize: "14px", cursor: "pointer", opacity: '0.5', aspectRatio: '1/1' }}
+        />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast';
-import { FaTimes, FaCrown } from "react-icons/fa";
+import { FaTimes, FaCrown, FaUser } from "react-icons/fa";
 
 import { Loading } from "./index"
 
@@ -201,8 +201,8 @@ export const Leaderboard = ({ user, colors }) => {
                                           <div className="player-info">
                                              {entry.photoURL 
                                                 ? ( <img src={entry.photoURL} alt="" className="player-avatar" />) 
-                                                : ( <div className="player-avatar-placeholder">
-                                                      {entry.displayName?.[0]?.toUpperCase() || "?"}
+                                                : ( <div  className="player-avatar">
+                                                      <FaUser  />
                                                    </div>)
                                              }
                                              <span className={`player-name ${isMe && 'you-badge'}`}>

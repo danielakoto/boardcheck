@@ -6,7 +6,8 @@
       "category": "",
       "sound": "",
       "urls": [],
-      "tags": ["silent"]
+      "tags": ["silent"],
+      "level": 1
    },
    {
       "id": "zuoya_gmk_ktt_kang_white",
@@ -19,7 +20,8 @@
          "https://www.aliexpress.us/item/3256805593846179.html",
          "https://www.aliexpress.us/item/3256804466857516.html"
       ],
-      "tags": ["creamy", "loud", "linear"]
+      "tags": ["creamy", "loud", "linear"],
+      "level": 1
    },
    {
       "id": "nuphy_halo75_v2io",
@@ -31,7 +33,8 @@
          "https://nuphy.com/products/nuphy-halo-v2-io?sca_ref=5278418.1KL4ifu5Zj",
          "https://nuphy.com/products/max-switches?sca_ref=5278418.1KL4ifu5Zj"
       ],
-      "tags": ["poppy", "deep", "linear"]
+      "tags": ["poppy", "deep", "linear"],
+      "level": 1
    },
    {
       "id": "gx87_ceramic_ktt_vintage",
@@ -43,69 +46,75 @@
          "https://goaff.pro/escgjp",
          "https://www.cerakey.com/products/full-set-v2?variant=41532871377035"
       ],
-      "tags": ["thocky", "deep", "linear"]
+      "tags": ["thocky", "deep", "linear"],
+      "level": 1
    },
    {
       "id": "sk75_kiiboom_rainy_akko_creamy_purple",
       "name": "Akko Creamy Purple Pro",
       "description": "Womier SK75 + KiiBOOM Rainy Froggy Keycaps + Akko Creamy Purple Pro",
       "category": "Poppy",
-      "sound": "../sounds/keyboard/sk75_kiiboom_rainy_akko_creamy_purple.mp3",
+      "sound": "https://firebasestorage.googleapis.com/v0/b/boardcheck-5d311.firebasestorage.app/o/sounds%2Fsk75_kiiboom_rainy_akko_creamy_purple.mp3?alt=media&token=ed7f3c38-a14f-476d-829e-872d31580986",
       "urls": [
          "https://womierkeyboard.com/products/womier-sk75?sca_ref=6103295.YmVMPX9mS1",
          "https://en.akkogear.com/product/akko-v3-creamy-purple-pro-switch/?ref=SULCE",
          "https://amzn.to/4llEMu5"
       ],
-      "tags": ["poppy", "deep", "linear"]
+      "tags": ["poppy", "deep", "linear"],
+      "level": 2
    },
    {
       "id": "sk75_kiiboom_rainy_akko_creamy_cyan",
       "name": "Deep Clicky - Akko Creamy Cyan",
       "description": "Womier SK75 + KiiBOOM Rainy Froggy Keycaps + Akko Creamy Cyan",
       "category": "Clicky",
-      "sound": "../sounds/keyboard/sk75_kiiboom_rainy_akko_creamy_cyan.mp3",
+      "sound": "https://firebasestorage.googleapis.com/v0/b/boardcheck-5d311.firebasestorage.app/o/sounds%2Fsk75_kiiboom_rainy_akko_creamy_cyan.mp3?alt=media&token=c497b020-6321-4a78-a903-3fc065d43d9f",
       "urls": [
          "https://en.akkogear.com/product/akko-creamy-cyan-switch/?ref=SULCE",
          "https://womierkeyboard.com/products/womier-sk75?sca_ref=6103295.YmVMPX9mS1",
          "https://amzn.to/4llEMu5"
       ],
-      "tags": ["clicky", "deep"]
+      "tags": ["clicky", "deep"],
+      "level": 5
    },
    {
       "id": "kiiboom_phamtom81_lite",
       "name": "Deep Creamy - KiiBOOM Phantom81",
       "description": "KiiBOOM Phantom81",
       "category": "Creamy",
-      "sound": "/sounds/keyboard/kiiboom_phamtom81_lite.mp3",
+      "sound": "https://firebasestorage.googleapis.com/v0/b/boardcheck-5d311.firebasestorage.app/o/sounds%2Fkiiboom_phamtom81_lite.mp3?alt=media&token=d736c646-5d03-4da1-9eb1-84abab5b9f12",
       "urls": [
          "https://www.kiiboom.com/products/kiiboom-phantom81-lite"
       ],
-      "tags": ["creamy", "deep"]
+      "tags": ["creamy", "deep"],
+      "level": 7
    },
    {
       "id": "m1v5_metal_keycaps_akko_creamy_purple",
       "name": "Metal Cling Thock",
       "description": "Monsgeek M1V5 + Akko Creamy Pro + Awekeys Metal Keycaps",
       "category": "Thocky",
-      "sound": "/sounds/keyboard/m1v5_metal_keycaps_akko_creamy_purple.mp3",
+      "sound": "https://firebasestorage.googleapis.com/v0/b/boardcheck-5d311.firebasestorage.app/o/sounds%2Fm1v5_metal_keycaps_akko_creamy_purple.mp3?alt=media&token=c39ced56-eb15-4b4f-8d7b-87d6430fb55e",
       "urls": [
          "https://www.monsgeek.com/product/m1-v5-via-rapid-disassembly/?ref=sulcetech",
          "https://en.akkogear.com/product/akko-v3-creamy-purple-pro-switch/?ref=SULCE",
          "https://awekeys.com/pages/wild-ice"
       ],
-      "tags": ["thocky", "deep"]
+      "tags": ["thocky", "deep"],
+      "level": 10
    },
    {
       "id": "neo65_gateron_smoothie_gummy_keycaps",
       "name": "Clacky",
       "description": "Neo65 + Gateron Smoothie + Gummy Keycaps",
       "category": "Thocky",
-      "sound": "/sounds/keyboard/neo65_gateron_smoothie_gummy_keycaps.mp3",
+      "sound": "https://firebasestorage.googleapis.com/v0/b/boardcheck-5d311.firebasestorage.app/o/sounds%2Fneo65_gateron_smoothie_gummy_keycaps.mp3?alt=media&token=61a38502-8503-428d-aede-4496e12f316c",
       "urls": [
          "https://www.qwertykeys.com/products/neo65-1?variant=43882015162611",
          "https://amzn.to/3y8Nqbp",
          "https://www.aliexpress.us/item/3256804831313643.html"
       ],
-      "tags": ["clacky", "deep"]
+      "tags": ["clacky", "deep"],
+      "level": 15
    }
 ]
