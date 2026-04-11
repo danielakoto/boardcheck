@@ -40,7 +40,7 @@ export const signUp = async (email, password) => {
         
         localStorage.setItem("token", token);
 
-        initUserDetails()
+        await initUserDetails();
         
         return({ res: "Success" });
     } catch (error) {
@@ -67,7 +67,7 @@ export const signIn = async (email, password) => {
             
             localStorage.setItem("token", token);
             
-            initUserDetails()
+            await initUserDetails();
             
         }).catch(error => {
             throw new Error(`${error}`);
@@ -178,7 +178,7 @@ export const saveScores = async (results) => {
     });
     const data = await res.json()
 
-    initUserDetails()
+    await initUserDetails();
     
     return({ res: "Success",  data: data});
   } catch (error) {
@@ -214,7 +214,7 @@ export const saveSettings = async () => {
     
     const data = await res.json()
 
-    initUserDetails()
+    await initUserDetails();
     
     return({ res: "Success",  data: data});
   } catch (error) {
@@ -244,7 +244,7 @@ const payment = async () => {
             configuration: "bpc_1StLe62LGH0KWWEEhC0CPx1u", // Optional ID of a portal configuration: https://stripe.com/docs/api/customer_portal/configuration
         });
 
-        initUserDetails()
+        await initUserDetails();
 
         return({ res: "Success", url: data.url });
     } catch (error) {
