@@ -15,7 +15,6 @@
  }
  
 .key {
-  // min-width: fit-content;
   position: relative;
   width: 30px;
   height: 30px;
@@ -37,11 +36,9 @@
 }
 
 .key.active {
-  // margin: 2px;
   top: 4px;
   background-color: var(--active-highlight);
   box-shadow: 0 0px var(--active-highlight);
-  // border: 0px solid transparent;  
 }
 
 .key.persistent {
