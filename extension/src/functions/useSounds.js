@@ -32,7 +32,7 @@ export const useSounds = (soundOptions) => {
       const sound = soundOptions.find(s => s.name === newSound.name)
       const { user } = await chrome.storage.local.get(["user"])
 
-      if (user?.stats?.level?.level < sound?.level || (sound?.level > 1 && !user.email)) {
+      if (user?.stats?.level?.level < sound?.level || (sound?.level > 1 && !user?.email)) {
          toast.error(`Unlocks at level ${sound.level}`)
          return
       } 
