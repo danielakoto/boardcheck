@@ -6,6 +6,7 @@ export { ColorSettings } from './ColorSettings';
 export { SoundSettings } from './SoundSettings';
 export { Store } from './Store';
 export { Leaderboard } from './Leaderboard';
+export { AdBanner } from './AdBanner';
 
 // icons
 export { Loading } from './icons/Loading';

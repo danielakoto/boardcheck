@@ -1,21 +1,34 @@
-// AdBanner.jsx - reusable component
-import { useEffect } from 'react';
+// src/components/AdBanner.jsx
+import { useEffect, useRef } from "react";
 
-export default function AdBanner({ slot }) {
+const AdBanner = ({ slot, format = "auto", style = {} }) => {
+  const adRef = useRef(null);
+  const initialized = useRef(false);
+
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {}
+    } catch (e) {
+      console.error("AdSense error:", e);
+    }
   }, []);
 
   return (
-    <ins
-      className="adsbygoogle"
-      style={{ display: 'block' }}
-      data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-      data-ad-slot={slot}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
-    />
+    <div style={{ textAlign: "center", ...style }}>
+      <ins
+        ref={adRef}
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-5266473855987721"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
+    </div>
   );
-}
+};
+
+export default AdBanner;

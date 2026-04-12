@@ -7,7 +7,7 @@ import { auth, analytics } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { logEvent } from 'firebase/analytics';
 
-import { Login, User, Board, Typing, ColorSettings, SoundSettings, Leaderboard, Loading } from './components/index';
+import { Login, User, Board, Typing, ColorSettings, SoundSettings, Leaderboard, Loading, AdBanner } from './components/index';
 import { useColors } from './functions/useColors';
 import { useSounds } from './functions/useSounds';
 import { launchConfetti } from './functions/confetti.js';
@@ -23,6 +23,7 @@ export const App = () => {
   const [typingState, setTypingState] = useState("idle");
   const [prevResults, setPrevResults] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showAd, setShowAd] = useState(false);
 
   const { colors, updateColor, resetColors } = useColors();
   const { sound, updateSound } = useSounds(sounds);
@@ -61,6 +62,7 @@ export const App = () => {
   };
 
   const handleTestComplete = async (results) => {
+    setShowAd(true);
     // Always log the test completion with key metrics
     logEvent(analytics, 'test_complete', {
       wpm:           results.wpm,
@@ -166,6 +168,12 @@ export const App = () => {
     if (prevResults && user) saveUnsavedResult();
   }, [user]);
 
+  useEffect(() => {
+    if (typingState === "running") {
+      setShowAd(false);
+    }
+  }, [typingState]);
+
   const handleMenuToggle = () => {
     setMenu(o => {
       logEvent(analytics, 'menu_toggle', { visible: !o });
@@ -221,6 +229,23 @@ export const App = () => {
           style={{ fontSize: "14px", cursor: "pointer", opacity: '0.5', aspectRatio: '1/1' }}
         />
       </div>
+      {showAd ? (
+        <div style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 999,
+          background: 'var(--board-bg)',
+          borderRadius: '12px',
+          padding: '12px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+        }}>
+          <AdBanner slot="6699150226" format="horizontal" />
+        </div>
+      ) : (
+        <AdBanner slot="6699150226" format="horizontal" />
+      )}
     </div>
   );
 };
