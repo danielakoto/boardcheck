@@ -1,7 +1,7 @@
 // src/components/AdBanner.jsx
 import { useEffect, useRef } from "react";
 
-const AdBanner = ({ slot, format = "auto", style = {} }) => {
+export const AdBanner = ({ slot, format = "auto", style = {} }) => {
   const adRef = useRef(null);
   const initialized = useRef(false);
 
@@ -30,5 +30,3 @@ const AdBanner = ({ slot, format = "auto", style = {} }) => {
     </div>
   );
 };
-
-export default AdBanner;
