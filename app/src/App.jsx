@@ -30,6 +30,8 @@ export const App = () => {
   let savedTheme = localStorage.getItem('theme');
   if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
 
+  launchConfetti(colors)
+
   // ─── Log app open once on mount ───────────────────────────────────────────
   useEffect(() => {
     logEvent(analytics, 'app_open');
