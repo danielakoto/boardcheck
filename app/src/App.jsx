@@ -232,9 +232,8 @@ export const App = () => {
       {showAd ? (
         <div style={{
           position: 'fixed',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
+          bottom: '8px',
+          right: '8px',
           zIndex: 999,
           background: 'var(--board-bg)',
           borderRadius: '12px',
