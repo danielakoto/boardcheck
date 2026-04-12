@@ -27,10 +27,8 @@ export const commonWords = {
     'plug', 'font', 'icon',
   ],
   five: [
-    // ← moved from your `four` (all are 5 letters)
     'quick', 'panel', 'frame', 'pixel', 'sharp', 'clean', 'clear',
     'light', 'heavy', 'solid', 'dense', 'loose', 'tight', 'quiet', 'score', 'skill',
-    // ← moved from your `five` that are actually 5 letters
     'speed', 'focus', 'mount', 'board', 'sound', 'write', 'words',
     'cable', 'rapid', 'local', 'bring', 'begin', 'offer', 'place',
     'power', 'value',
