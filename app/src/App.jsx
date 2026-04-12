@@ -30,8 +30,6 @@ export const App = () => {
   let savedTheme = localStorage.getItem('theme');
   if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
 
-  launchConfetti(colors)
-
   // ─── Log app open once on mount ───────────────────────────────────────────
   useEffect(() => {
     logEvent(analytics, 'app_open');
@@ -96,20 +94,13 @@ export const App = () => {
       async () => {
         try {
           setLoading(true);
-          const prevLevel = user.stats.level.level || 0;
-          const prevWPM   = user.stats.wpm || 0;
           const res = await saveScores(results);
 
           if (res?.res === "Success") {
             const updatedUser = JSON.parse(localStorage.getItem("user"));
             setUser(updatedUser);
             logEvent(analytics, 'score_saved', { wpm: results.wpm, accuracy: results.accuracy });
-
-            if (updatedUser.stats.level.level > prevLevel) launchConfetti(colors);
-            if (updatedUser.stats.wpm > prevWPM) launchConfetti(colors);
-          } else {
-            throw new Error(res?.res || "Error saving scores.");
-          }
+          } else throw new Error(res?.res || "Error saving scores.");
         } finally {
           setLoading(false);
         }
@@ -121,6 +112,7 @@ export const App = () => {
       },
       { icon: false }
     );
+    launchConfetti(colors)
   };
 
   const handleLogin = async () => {
@@ -147,9 +139,7 @@ export const App = () => {
                   accuracy: prevResults.data.accuracy,
                   deferred: true,  // score was saved after login
                 });
-              } else {
-                throw new Error(res?.res || "Error saving scores.");
-              }
+              } else throw new Error(res?.res || "Error saving scores.");
             } finally {
               setLoading(false);
             }

@@ -116,16 +116,12 @@ export const App = () => {
       async () => {
         try {
           setLoading(true)
-          const prevLevel = user.stats.level.level
-          const prevWPM = user.stats.wpm
           const res = await sendMessage({ action: "saveScores", results: results });
           if (res?.res === "Success") {
             let { user } = await chrome.storage.local.get("user");
             setUser(user)
-            if(user.stats.level.level > prevLevel) launchConfetti(colors)
-            if(user.stats.wpm > prevWPM) launchConfetti(colors)
           }
-          else throw new Error(res?.res || "Error signing in with Google.");
+          else throw new Error(res?.res || "Error saving scores.");
         } finally {
           setLoading(false);
         }
@@ -135,6 +131,7 @@ export const App = () => {
         error: (e) => `Error occured: ${e}`,
       }, { icon: false }
     );
+    launchConfetti(colors)
   }
 
   const handleLogin = async () => {
@@ -155,7 +152,7 @@ export const App = () => {
                 let { user } = await chrome.storage.local.get("user");
                 setUser(user)
               }
-              else throw new Error(res?.res || "Error signing in with Google.");
+              else throw new Error(res?.res || "Error saving scores.");
             } finally {
               setLoading(false);
             }

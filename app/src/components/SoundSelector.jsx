@@ -1,5 +1,3 @@
-import { FaLink } from "react-icons/fa6";
-
 import "../styles/SoundSelector.scss"
 
 export function SoundSelector({ colors, sound, updateSound, sounds }) {
@@ -23,7 +21,7 @@ export function SoundSelector({ colors, sound, updateSound, sounds }) {
             >
                <div className="sound-title">
                   <h4>{s.name}</h4>
-                  {(user?.stats?.level?.level < s?.level || (s?.level > 1 && !user.email)) && (<p>Unlocks at Level {s.level}</p>)}
+                  {(user?.stats?.level?.level < s?.level || (s?.level > 1 && !user?.email)) && (<p>Unlocks at Level {s.level}</p>)}
                </div>
                <p>{s.description}</p>
                
