@@ -29,7 +29,7 @@ export function SoundSelector({ colors, sound, updateSound, sounds }) {
             >
                <div className="sound-title">
                   <h4>{s.name}</h4>
-                  {(s.level > 1 || user?.stats?.level?.level < s.level) && (<p>Unlocks at Level {s.level}</p>)}
+                  {(user?.stats?.level?.level < s?.level || (s?.level > 1 && !user.email)) && (<p>Unlocks at Level {s.level}</p>)}
                </div>
                <p>{s.description}</p>
                

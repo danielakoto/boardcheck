@@ -13,7 +13,7 @@ export const launchConfetti = (colors) => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const COLORS = ["#ff5353", "	#ffee53", "	#53ffa9", "#5395ff", "#ef53ff", colors.keyBg, colors.boardBg];
+  const COLORS = ["#ff0808", "	#f0da18", "	#16f485", "#5395ff", "#e41afa", colors.keyBg, colors.boardBg];
   const SHAPES = ['rect', 'circle', 'ribbon'];
   const particles = [];
 
