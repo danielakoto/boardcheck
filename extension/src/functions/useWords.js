@@ -1,4 +1,4 @@
-
+/* eslint-disable no-undef */
 export const commonWords = {
   one: [
     'a', 'i',
@@ -111,7 +111,7 @@ const getDistribution = (level) => {
   return interpolateDist(lower.dist, upper.dist, t);
 };
 
-export const generateWords = (count = 50) => {
+export const generateWords = async (count = 50) => {
   const { user } = await chrome.storage.local.get(["user"]);
   const level = user?.stats?.level?.level || 1
 
