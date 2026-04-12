@@ -224,7 +224,7 @@ export const Typing = ({ user, colors, onTestComplete, typingState, setTypingSta
                letterSpacing: '2px',
             }}
          >
-            {(typingState === "running" || typingState === "ready") ? "Stop WPM Test" : "Start WPM Test"}
+            {(typingState === "running" || typingState === "ready") ? "Stop Test" : "Test Your Typing Speed"}
          </div>
 
             {/* Quick-start hint — only show when idle or finished */}
