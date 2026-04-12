@@ -5,8 +5,8 @@ export const AdBanner = ({ slot, format = "auto", style = {} }) => {
   const containerRef = useRef(null);
   const initialized = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasAd, setHasAd] = useState(false);
 
-  // Wait until container has real width before rendering ins tag
   useEffect(() => {
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -24,7 +24,6 @@ export const AdBanner = ({ slot, format = "auto", style = {} }) => {
     return () => observer.disconnect();
   }, []);
 
-  // Only push once we know the container has width
   useEffect(() => {
     if (!isVisible || initialized.current) return;
     initialized.current = true;
@@ -34,7 +33,18 @@ export const AdBanner = ({ slot, format = "auto", style = {} }) => {
     } catch (e) {
       console.error("AdSense error:", e);
     }
+
+    // Check after a short delay if AdSense actually filled the slot
+    const timer = setTimeout(() => {
+      const ins = containerRef.current?.querySelector("ins.adsbygoogle");
+      const filled = ins?.getAttribute("data-ad-status") === "filled";
+      setHasAd(filled);
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, [isVisible]);
+
+  if (!hasAd) return null; // render nothing if no ad
 
   return (
     <div style={{
@@ -43,7 +53,7 @@ export const AdBanner = ({ slot, format = "auto", style = {} }) => {
       right: '8px',
       zIndex: 999,
       width: '336px',
-      background: 'var(--bg)',
+      background: 'var(--board-bg)',
       borderRadius: '12px',
       padding: '12px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
