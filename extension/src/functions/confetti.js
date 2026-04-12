@@ -12,7 +12,7 @@ export const launchConfetti = (colors) => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const COLORS = [colors.keyBg, colors.keyText, colors.keyShadow, colors.boarBg, colors.activeHighlight,colors.clickedKeyBg, colors.clickedKeyText];
+  const COLORS = ["#ff5353", "	#ffee53", "	#53ffa9", "#5395ff", "#ef53ff", "	#ff9999", "#fdffa6"];
   const SHAPES = ['rect', 'circle', 'ribbon'];
   const particles = [];
 
@@ -43,7 +43,6 @@ export const launchConfetti = (colors) => {
     });
   }
 
-  let frame;
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
