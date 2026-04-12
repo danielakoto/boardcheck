@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import toast from "react-hot-toast";
 
 import "../styles/Board.scss";
 
@@ -69,7 +68,7 @@ const KEY_PITCH_OVERRIDES = {
   Shift: semitones(-4),
 };
 
-export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersistentKeys, sound }) => {
+export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersistentKeys, sound, setShowNumpad }) => {
   const audioContextRef = useRef(null);
   const audioBufferRef = useRef(null);
 
@@ -130,6 +129,11 @@ export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersis
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (!event.key) return;
+      if (event.code?.startsWith("Numpad") || event.code === "NumLock") {
+        setShowNumpad(true);
+        return;
+      }
+
       const normalizedKey = normalizeKey(event.key);
 
       playSound(normalizedKey);

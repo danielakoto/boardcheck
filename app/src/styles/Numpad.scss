@@ -1,0 +1,110 @@
+.numpad {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--board-bg);
+  border-radius: 5px;
+  box-shadow: var(--box-shadow);
+}
+
+// Grid container replaces the old row-based layout
+.numpad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 66px);
+  grid-template-rows: repeat(5, 66px);
+  gap: 6px;
+}
+
+.numpad-key {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--key-bg);
+  border-radius: 7px;
+  border: 1px solid var(--black);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: default;
+  box-shadow: 0 5px var(--key-shadow);
+  color: var(--key-text);
+  transition: background-color 0.2s, color 0.2s, top 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.numpad-key.active {
+  top: 5px;
+  background-color: var(--active-highlight);
+  box-shadow: 0 0px var(--active-highlight);
+}
+
+.numpad-key.persistent {
+  background-color: var(--clicked-key-bg);
+  color: var(--clicked-key-text);
+}
+
+// Grid placement for each key
+.numpad-key--NumLock { grid-column: 1; grid-row: 1; }
+.numpad-key--NSlash  { grid-column: 2; grid-row: 1; }
+.numpad-key--NStar   { grid-column: 3; grid-row: 1; }
+.numpad-key--N7      { grid-column: 1; grid-row: 2; }
+.numpad-key--N8      { grid-column: 2; grid-row: 2; }
+.numpad-key--N9      { grid-column: 3; grid-row: 2; }
+.numpad-key--N4      { grid-column: 1; grid-row: 3; }
+.numpad-key--N5      { grid-column: 2; grid-row: 3; }
+.numpad-key--N6      { grid-column: 3; grid-row: 3; }
+.numpad-key--N1      { grid-column: 1; grid-row: 4; }
+.numpad-key--N2      { grid-column: 2; grid-row: 4; }
+.numpad-key--N3      { grid-column: 3; grid-row: 4; }
+.numpad-key--N0      { grid-column: 1 / span 2; grid-row: 5; } // wide
+.numpad-key--NDot    { grid-column: 3; grid-row: 5; }
+
+// Tall keys spanning 2 rows
+.numpad-key--NMinus  { grid-column: 4; grid-row: 1; }
+.numpad-key--NPlus   { grid-column: 4; grid-row: 2 / span 2; } // rows 2–3
+.numpad-key--NEnter  { grid-column: 4; grid-row: 4 / span 2; } // rows 4–5
+
+
+@media only screen and (max-width: 2000px) {
+  .numpad-grid {
+    grid-template-columns: repeat(4, 50px);
+    grid-template-rows: repeat(5, 50px);
+    gap: 4px;
+  }
+
+  .numpad-key {
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 0 4px var(--key-shadow);
+  }
+
+  .numpad-key.active {
+    top: 4px;
+    box-shadow: 0 0px var(--active-highlight);
+  }
+}
+
+
+@media only screen and (max-width: 700px) {
+  .numpad-grid {
+    grid-template-columns: repeat(4, 18px);
+    grid-template-rows: repeat(5, 18px);
+    gap: 2px;
+  }
+
+  .numpad-key {
+    border-radius: 2px;
+    font-size: 8px;
+    box-shadow: 0 2px var(--key-shadow);
+  }
+
+  .numpad-key.active {
+    top: 2px;
+    box-shadow: 0 0px var(--active-highlight);
+  }
+}
