@@ -71,6 +71,8 @@ export const App = () => {
       user_logged_in: !!user,
     });
 
+    launchConfetti(colors)
+
     if (!user) {
       localStorage.setItem("user", JSON.stringify({
         stats: {
@@ -112,7 +114,6 @@ export const App = () => {
       },
       { icon: false }
     );
-    launchConfetti(colors)
   };
 
   const handleLogin = async () => {

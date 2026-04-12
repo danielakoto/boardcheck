@@ -93,6 +93,8 @@ export const App = () => {
   };
 
   const handleTestComplete = async (results) => {
+    launchConfetti(colors)
+
     if(!user) {
       chrome.storage.local.set({ user: {
         "stats": {
@@ -131,7 +133,6 @@ export const App = () => {
         error: (e) => `Error occured: ${e}`,
       }, { icon: false }
     );
-    launchConfetti(colors)
   }
 
   const handleLogin = async () => {
