@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import toast from 'react-hot-toast';
 
 import { saveSettings } from '../background'
 
@@ -23,6 +24,14 @@ export const useSounds = (soundOptions) => {
    })
 
    const updateSound = (newSound) => {
+      const sound = soundOptions.find(s => s.name === newSound.name)
+      let user = JSON.parse(localStorage.getItem("user"))
+
+      if (user?.stats?.level?.level < sound?.level || sound?.level > 1) {
+         toast.error(`Unlocks at level ${sound.level}`)
+         return
+      } 
+
       setSound(newSound)
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: newSound.name }))
       saveSettings()

@@ -29,6 +29,14 @@ export const useSounds = (soundOptions) => {
    }, []) // soundOptions is defined at module level so it's stable — no need to include it
 
    const updateSound = async (newSound) => {
+      const sound = soundOptions.find(s => s.name === newSound.name)
+      const { user } = await chrome.storage.local.get(["user"])
+
+      if (user?.stats?.level?.level < sound?.level || sound?.level > 1) {
+         toast.error(`Unlocks at level ${sound.level}`)
+         return
+      } 
+
       await chrome.storage.local.set({ sound: JSON.stringify({ name: newSound.name }) })
       setSound(newSound)
       await sendMessage({ action: "saveSettings" })
