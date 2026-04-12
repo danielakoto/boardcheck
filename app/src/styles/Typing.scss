@@ -48,7 +48,7 @@
       opacity: 1;
     }
 
-    &.word-done-correct { opacity: 0.85; }
+    &.word-done-correct { opacity: 0.5; }
     &.word-done-wrong   { opacity: 0.85; color: #f87171; }
   }
 
@@ -57,7 +57,7 @@
     transition: color 0.08s ease;
 
     &-pending { color: var(--text); }
-    &-correct { color: var(--text); opacity: 0.85; }
+    &-correct { color: var(--text); opacity: 0.7; }
     &-wrong   { color: #f87171; }         // red
   }
 }
