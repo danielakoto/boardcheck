@@ -130,7 +130,6 @@ export const Board = ({ realTimeKeys, setRealTimeKeys, persistentKeys, setPersis
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (!event.key) return;
-      console.log(event.key);
       const normalizedKey = normalizeKey(event.key);
 
       playSound(normalizedKey);

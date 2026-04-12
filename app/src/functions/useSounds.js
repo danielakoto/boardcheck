@@ -9,7 +9,7 @@ export const useSounds = (soundOptions) => {
   const [sound, setSound] = useState(() => {
     try {
       let saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      let user = JSON.parse(localStorage.getItem("user"));
+      const user = JSON.parse(localStorage.getItem("user"));
 
       if (user?.settings?.activeSound) {
         saved = user.settings.activeSound;
@@ -25,7 +25,7 @@ export const useSounds = (soundOptions) => {
 
   const updateSound = (newSound) => {
     const sound = soundOptions.find((s) => s.name === newSound.name);
-    let user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (user?.stats?.level?.level < sound?.level || (sound?.level > 1 && !user?.email)) {
       toast.error(`Unlocks at level ${sound.level}`);
