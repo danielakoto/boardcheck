@@ -78,6 +78,17 @@ export const SoundSettings = ({ colors, sound, updateSound, sounds }) => {
             updateSound={updateSound}
             sounds={sounds}
           />
+          <div
+            style={{
+              padding: "8px",
+              color: "var(--text)",
+              fontSize: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              opacity: "0.5"
+            }}
+          >Affiliate Links: Purchasing with these links but helps support BoardCheck!</div>
         </div>
       </div>
     </>
