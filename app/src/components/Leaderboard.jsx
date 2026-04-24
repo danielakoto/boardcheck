@@ -208,7 +208,7 @@ export const Leaderboard = ({ user, colors }) => {
                                                    </div>)
                                              }
                                              <span className={`player-name ${isMe && 'you-badge'}`}>
-                                                {entry.email?.split('@')[0] || "?"}
+                                                {entry.displayName || "?"}
                                              </span>
                                           </div>
                                        </td>
